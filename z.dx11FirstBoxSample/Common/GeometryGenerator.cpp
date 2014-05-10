@@ -217,7 +217,7 @@ void GeometryGenerator::Subdivide(MeshData& meshData)
 	// *-----*-----*
 	// v0    m2     v2
 
-	UINT numTris = inputCopy.Indices.size()/3;
+	UINT numTris = static_cast< UINT >(inputCopy.Indices.size() / 3);
 	for(UINT i = 0; i < numTris; ++i)
 	{
 		Vertex v0 = inputCopy.Vertices[ inputCopy.Indices[i*3+0] ];

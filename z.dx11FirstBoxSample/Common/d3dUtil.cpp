@@ -18,7 +18,7 @@ ID3D11ShaderResourceView* d3dHelper::CreateTexture2DArraySRV(
 	// CPU can read the resource.
 	//
 
-	UINT size = filenames.size();
+	UINT size = static_cast< UINT >( filenames.size() );
 
 	std::vector<ID3D11Texture2D*> srcTex(size);
 	for(UINT i = 0; i < size; ++i)
