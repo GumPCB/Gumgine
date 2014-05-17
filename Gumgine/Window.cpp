@@ -74,7 +74,7 @@ namespace Gumgine
 		ZeroMemory( &msg , sizeof( msg ) );
 		while ( msg.message != WM_QUIT )
 		{
-			if ( PeekMessage( &msg , NULL , 0U , 0U , PM_REMOVE ) )
+			if ( PeekMessage( &msg , nullptr , 0U , 0U , PM_REMOVE ) )
 			{
 				TranslateMessage( &msg );
 				DispatchMessage( &msg );

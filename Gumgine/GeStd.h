@@ -21,15 +21,15 @@
 
 //using namespace std;
 
-#define SAFE_ZERO(A)				{ A = 0; }
-#define SAFE_NEW(A,B)				{ if( !A ) A = new B; }
-#define SAFE_DEL(A)					{ if( A ) delete A; (A) = NULL; }
-#define SAFE_ARRAY_NEW(A, B, C)		{ if( !A && C ) A = new B[C]; }
-#define SAFE_ARRAY_DEL(A)			{ if( A ) delete [] A; (A) = NULL; }
-#define SAFE_RELEASE(A)				{ if( A ) { (A)->Release(); (A) = NULL; } }
-#define NEW_CLEAR(A, B)				{ if( !A ) A = new B(); if(A) memset(A, 0, sizeof(B) ); }
-#define NEW_ARRAY_CLEAR(A, B, C)	{ if( !A && C ) A = new B[C]; if(A) memset(A, 0, sizeof(B)*C ); }
-#define SAFE_VECTOR_DELETE(A, B)	{ for ( vector<A*>::iterator iter = B.begin() ; iter != B.end() ; ++iter ) SAFE_DEL( *iter ); }
+#define SAFE_ZERO( A )					{ A = 0; }
+#define SAFE_NEW( A , B )				{ if( !A ) A = new B; }
+#define SAFE_DEL( A )					{ if( A ) delete A; ( A ) = nullptr; }
+#define SAFE_ARRAY_NEW( A , B , C )		{ if( !A && C ) A = new B[C]; }
+#define SAFE_ARRAY_DEL( A )				{ if( A ) delete [] A; ( A ) = nullptr; }
+#define SAFE_RELEASE( A )				{ if( A ) { ( A )->Release(); ( A ) = nullptr; } }
+#define NEW_CLEAR( A , B )				{ if( !A ) A = new B(); if( A ) memset( A, 0, sizeof( B ) ); }
+#define NEW_ARRAY_CLEAR( A , B , C )	{ if( !A && C ) A = new B[ C ]; if( A ) memset( A, 0, sizeof( B ) * C ); }
+#define SAFE_STL_CONTAINER_DELETE( A )	{ for ( auto iter = A.begin() ; iter != A.end() ; ++iter ) SAFE_DEL( *iter ); }
 //#define TEX_PATH_WCHAR				L"..\\data\\TEX\\"
 
 //extern DWORD				g_Screen_X_Size;
@@ -47,7 +47,7 @@
 
 namespace Gumgine
 {
-	template<class T> class GeSingleton
+	template< class T > class GeSingleton
 	{
 	public:
 		static T& GetInstance()
