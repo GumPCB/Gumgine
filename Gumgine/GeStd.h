@@ -7,6 +7,8 @@
 //#include <d3dx9.h>
 #include <xinput.h>
 
+#include <thread>
+#include <mutex>
 #include <vector>
 #include <deque>
 #include <list>
@@ -17,13 +19,13 @@
 #include <bitset>
 #include <limits>
 #include <functional>
-
+#include <memory>
 
 //using namespace std;
 
 #define SAFE_ZERO( A )					{ A = 0; }
 #define SAFE_NEW( A , B )				{ if( !A ) A = new B; }
-#define SAFE_DEL( A )					{ if( A ) delete A; ( A ) = nullptr; }
+#define SAFE_DEL( A )					{ if( A ) delete A; ( A ) = nullptr; }	std::unique_ptr
 #define SAFE_ARRAY_NEW( A , B , C )		{ if( !A && C ) A = new B[C]; }
 #define SAFE_ARRAY_DEL( A )				{ if( A ) delete [] A; ( A ) = nullptr; }
 #define SAFE_RELEASE( A )				{ if( A ) { ( A )->Release(); ( A ) = nullptr; } }
