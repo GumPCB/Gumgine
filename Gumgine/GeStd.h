@@ -20,6 +20,7 @@
 #include <limits>
 #include <functional>
 #include <memory>
+#include <cassert>
 
 //using namespace std;
 
@@ -57,5 +58,13 @@ namespace Gumgine
 			static T theSingleInstance;
 			return theSingleInstance;
 		}
+	};
+
+	class GumCore
+	{
+		virtual bool Init() = 0;	// 초기화
+		virtual bool Frame() = 0;	// 그리기 전에 할일
+		virtual bool Render() = 0;	// 화면에 그릴때
+		virtual bool Release() = 0; // 자원 해제
 	};
 }
