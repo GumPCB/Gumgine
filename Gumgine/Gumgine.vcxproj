@@ -168,12 +168,12 @@
   <ItemGroup>
     <ClInclude Include="D3D.h" />
     <ClInclude Include="GeStd.h" />
-    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Util\Timer.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D.cpp" />
-    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Util\Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

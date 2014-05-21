@@ -1,5 +1,5 @@
 #pragma once
-#include "GeStd.h"
+#include "../GeStd.h"
 
 namespace Gumgine
 {
