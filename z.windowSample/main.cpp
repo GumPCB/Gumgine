@@ -1,8 +1,8 @@
 #include <iostream>
 #include <Windows.h>
-#include "../Gumgine/Window.h"
+#include "../Gumgine/Core/Window.h"
 
-INT WINAPI wWinMain( HINSTANCE hInst , HINSTANCE , LPWSTR , INT )
+int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )
 {
 	std::mutex mutex;
 	std::lock_guard< std::mutex > lock( mutex );
@@ -10,18 +10,16 @@ INT WINAPI wWinMain( HINSTANCE hInst , HINSTANCE , LPWSTR , INT )
 	std::thread t1( [ = ]()
 	{
 		std::cout << "t1 : " << std::this_thread::get_id() << std::endl;
-		Gumgine::Window window;
-		window.SetWindowSize( 800 , 600 );
-		window.SetWin( hInst , L"t1" );
+		Gumgine::Core::Window window;
+		window.SetWin( hInst , L"t1" , 800 , 600 );
 		window.Run();
 	} );
 
 	std::thread t2( [ = ]()
 	{
 		std::cout << "t2 : " << std::this_thread::get_id() << std::endl;
-		Gumgine::Window window;
-		window.SetWindowSize( 800 , 600 );
-		window.SetWin( hInst , L"t2" );
+		Gumgine::Core::Window window;
+		window.SetWin( hInst , L"t2" , 800 , 600 );
 		window.Run();
 	} );
 

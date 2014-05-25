@@ -21,24 +21,33 @@
     <ClInclude Include="GeStd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Util\Timer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\D3D.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton\Global.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Window.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton\Singleton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Window.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Util\Timer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\D3D.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Window.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleton\Global.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
