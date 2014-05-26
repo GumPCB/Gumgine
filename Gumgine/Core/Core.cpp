@@ -1,0 +1,172 @@
+#include "Core.h"
+#include "../Util/Timer.h"
+
+namespace Gumgine
+{
+	namespace Core
+	{
+		Core::Core()
+		{
+			SAFE_NEW( coreTimer , Gumgine::Util::Timer );
+		}
+
+		Core::~Core()
+		{
+			SAFE_DEL( coreTimer );
+		}
+
+		int Core::Run()
+		{
+			CoreInit();
+			ShowWindow( GetHWND() , SW_SHOWDEFAULT );
+			UpdateWindow( GetHWND() );
+
+			MSG msg;
+			ZeroMemory( &msg , sizeof( msg ) );
+			while ( msg.message != WM_QUIT )
+			{
+				if ( PeekMessage( &msg , nullptr , 0U , 0U , PM_REMOVE ) )
+				{
+					TranslateMessage( &msg );
+					DispatchMessage( &msg );
+				}
+				else
+				{
+					//랜더랑 같은 코드로 프레임
+					CoreFrame();
+					CoreRender();
+				}
+			}
+			CoreRelease();
+			return ( int ) msg.wParam;
+		}
+
+		// Init //////////////////////////////////////////////////////////////////////
+		bool Core::CoreInit()
+		{
+			PreCoreInit();
+			Init();
+			return PostCoreInit();
+		}
+
+		bool Core::Init()
+		{
+			return true;
+		}
+
+		bool Core::PreCoreInit()
+		{
+			coreTimer->Init();
+			//I_Input.Init();
+			//I_Xbox360Controller.Init();
+			//I_CameraMgr.Init();
+			//I_Debug.SetDebugMode( true );
+			//I_Debug.Init();
+			//m_pGumSky->Init();
+			return true;
+		}
+
+		bool Core::PostCoreInit()
+		{
+			//I_LightMgr.Init();
+			return true;
+		}
+		////////////////////////////////////////////////////////////////////// Init //
+
+		// Frame /////////////////////////////////////////////////////////////////////
+		bool Core::CoreFrame()
+		{
+			PreCoreFrame();
+			Frame();
+			return PostCoreFrame();
+		}
+
+		bool Core::Frame()
+		{
+			return true;
+		}
+
+		bool Core::PreCoreFrame()
+		{
+			coreTimer->Frame();
+			//I_Input.Frame();
+			//I_Xbox360Controller.Frame();
+			//I_Debug.Frame();
+			//I_CameraMgr.Frame();
+			return true;
+		}
+
+		bool Core::PostCoreFrame()
+		{
+			//I_LightMgr.Frame();
+			//I_Input.SaveState();
+			return true;
+		}
+		///////////////////////////////////////////////////////////////////// Frame //
+
+		// Rander ////////////////////////////////////////////////////////////////////
+		bool Core::CoreRender()
+		{
+			PreCoreRender();
+			Render();
+			return PostCoreRender();
+		}
+
+		bool Core::Render()
+		{
+			return true;
+		}
+
+		bool Core::PreCoreRender()
+		{
+			//g_pd3dDevice->Clear( 0 , NULL , D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER , D3DCOLOR_XRGB( 0 , 0 , 0 ) , 1.0f , 0 );
+			//if ( FAILED( g_pd3dDevice->BeginScene() ) )
+			//{
+			//	return false;
+			//}
+			//m_pGumSky->Render();
+			//I_Debug.Render();
+			//I_LightMgr.Render();
+			//I_CameraMgr.Render();
+			return true;
+		}
+
+		bool Core::PostCoreRender()
+		{
+			//g_pd3dDevice->EndScene();
+			//g_pd3dDevice->Present( NULL , NULL , NULL , NULL );
+			return true;
+		}
+		//////////////////////////////////////////////////////////////////// Rander //
+
+		// Release ///////////////////////////////////////////////////////////////////
+		bool Core::CoreRelease()
+		{
+			PreCoreRelease();
+			Release();
+			return PostCoreRelease();
+		}
+
+		bool Core::Release()
+		{
+			return true;
+		}
+
+		bool Core::PreCoreRelease()
+		{
+			return true;
+		}
+
+		bool Core::PostCoreRelease()
+		{
+			//I_Input.Release();
+			//I_LightMgr.Release();
+			coreTimer->Release();
+			//I_CameraMgr.Release();
+			//I_Debug.Release();
+			//m_pGumSky->Release();
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////// Release //
+	}
+}

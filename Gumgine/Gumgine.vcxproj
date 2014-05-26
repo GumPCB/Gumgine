@@ -166,6 +166,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Core.h" />
     <ClInclude Include="Core\D3D.h" />
     <ClInclude Include="GeStd.h" />
     <ClInclude Include="Singleton\Global.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Core\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\D3D.cpp" />
     <ClCompile Include="Singleton\Global.cpp" />
     <ClCompile Include="Util\Timer.cpp" />
