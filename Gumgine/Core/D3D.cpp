@@ -174,6 +174,7 @@ namespace Gumgine
 		{
 			SAFE_RELEASE( d3dDevice );
 			SAFE_RELEASE( d3dImmediateContext );
+			SAFE_RELEASE( swapChain );
 			SAFE_RELEASE( depthStencilBuffer );
 			SAFE_RELEASE( renderTargetView );
 			SAFE_RELEASE( depthStencilView );

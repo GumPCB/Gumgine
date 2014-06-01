@@ -36,7 +36,7 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
 	//_CrtSetBreakAlloc( 319 );
 
-	const int maxThreadNum = 1;
+	const int maxThreadNum = 4;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
@@ -53,7 +53,6 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 	for ( auto &thread : threadPool )
 	{
 		thread.join();
-		thread.~thread();
 	}
 	threadPool.clear();
 
