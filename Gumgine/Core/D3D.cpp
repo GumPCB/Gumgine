@@ -1,5 +1,5 @@
-#include "D3D.h"
 #include <D3D11.h>
+#include "D3D.h"
 
 namespace Gumgine
 {
@@ -167,6 +167,16 @@ namespace Gumgine
 			*screenViewPort = { 0.0f , 0.0f , static_cast< float >( GetWidth() ) , static_cast< float >( GetHeight() ) , 0.0f , 1.0f };
 			d3dImmediateContext->RSSetViewports( 1 , screenViewPort );
 
+			return true;
+		}
+
+		bool D3D::Release()
+		{
+			SAFE_RELEASE( d3dDevice );
+			SAFE_RELEASE( d3dImmediateContext );
+			SAFE_RELEASE( depthStencilBuffer );
+			SAFE_RELEASE( renderTargetView );
+			SAFE_RELEASE( depthStencilView );
 			return true;
 		}
 	}

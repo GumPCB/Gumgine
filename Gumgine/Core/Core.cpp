@@ -25,17 +25,17 @@ namespace Gumgine
 			ZeroMemory( &msg , sizeof( msg ) );
 			while ( msg.message != WM_QUIT )
 			{
-				if ( PeekMessage( &msg , nullptr , 0U , 0U , PM_REMOVE ) )
+				if ( PeekMessage( &msg , GetHWND() , 0U , 0U , PM_REMOVE ) )
 				{
 					TranslateMessage( &msg );
 					DispatchMessage( &msg );
 				}
 				else
 				{
-					//랜더랑 같은 코드로 프레임
 					CoreFrame();
 					CoreRender();
 				}
+				Sleep( 0 );
 			}
 			CoreRelease();
 			return ( int ) msg.wParam;
@@ -56,6 +56,7 @@ namespace Gumgine
 
 		bool Core::PreCoreInit()
 		{
+			SetDevice();
 			coreTimer->Init();
 			//I_Input.Init();
 			//I_Xbox360Controller.Init();
@@ -161,10 +162,11 @@ namespace Gumgine
 		{
 			//I_Input.Release();
 			//I_LightMgr.Release();
-			coreTimer->Release();
 			//I_CameraMgr.Release();
 			//I_Debug.Release();
 			//m_pGumSky->Release();
+			SAFE_RELEASE( coreTimer );
+			D3D::Release();
 			return true;
 		}
 		/////////////////////////////////////////////////////////////////// Release //

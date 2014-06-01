@@ -15,7 +15,7 @@ namespace Gumgine
 			Gumgine::Singleton::GlobalVariables::GetInstance().SetWindow( nullptr );
 		}
 
-		bool Window::SetWin( HINSTANCE hInst , TCHAR* pTitleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
+		bool Window::SetWin( HINSTANCE hInst , const std::wstring& pTitleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
 		{
 			this->width = width;
 			this->height = height;
@@ -28,7 +28,7 @@ namespace Gumgine
 			{
 				sizeof( WNDCLASSEX )
 				, CS_HREDRAW | CS_VREDRAW	//CS_CLASSDC
-				, []( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam )->LRESULT 
+				, []( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam )->LRESULT
 				{
 					auto win = Gumgine::Singleton::GlobalVariables::GetInstance().GetWindow();
 					if ( win != nullptr )
@@ -54,7 +54,7 @@ namespace Gumgine
 			AdjustWindowRect( &rc , WS_OVERLAPPEDWINDOW , false );
 
 			// Create the application's window
-			this->hWnd = CreateWindow( wc.lpszClassName , pTitleName
+			this->hWnd = CreateWindow( wc.lpszClassName , pTitleName.c_str()
 									   , WS_OVERLAPPEDWINDOW
 									   , 0 , 0
 									   , rc.right - rc.left , rc.bottom - rc.top

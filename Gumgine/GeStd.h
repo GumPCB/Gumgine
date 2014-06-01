@@ -3,6 +3,7 @@
 //#include <stdlib.h>
 //#include <atlconv.h>
 #include <tchar.h>
+#include <D3D11.h>
 //#include <d3d9.h>
 //#include <d3dx9.h>
 #include <xinput.h>

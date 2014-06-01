@@ -40,8 +40,9 @@ namespace Gumgine
 			D3D();
 			virtual ~D3D() override;
 
-		public:
+		protected:
 			virtual bool SetDevice();
+			virtual bool Release();
 		};
 	}
 }
