@@ -165,7 +165,7 @@ namespace Gumgine
 			//I_CameraMgr.Release();
 			//I_Debug.Release();
 			//m_pGumSky->Release();
-			SAFE_RELEASE( coreTimer );
+			coreTimer->Release();
 			D3D::Release();
 			return true;
 		}

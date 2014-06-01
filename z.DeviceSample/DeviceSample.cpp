@@ -34,12 +34,13 @@ bool DeviceSample::Release()
 int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )
 {
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
+	//_CrtSetBreakAlloc( 319 );
 
-	const int maxThreadNum = 64;
+	const int maxThreadNum = 1;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
-		threadPool.push_back( std::thread ( [ = ]()
+		threadPool.push_back( std::thread( [ = ]()
 		{
 			std::wstring threadName = L"T" + std::to_wstring( i );
 			std::wcout << threadName << L", pid = " << std::this_thread::get_id() << std::endl;
@@ -48,11 +49,13 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 			aaa.Run();
 		} ) );
 	}
-	
+
 	for ( auto &thread : threadPool )
 	{
 		thread.join();
+		thread.~thread();
 	}
+	threadPool.clear();
 
 	return 1;
 }
