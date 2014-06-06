@@ -38,7 +38,7 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 	std::mutex mutex;
 	std::lock_guard< std::mutex > lock( mutex );
 
-	const int maxThreadNum = 1;
+	const int maxThreadNum = 16;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{

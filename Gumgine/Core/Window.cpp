@@ -42,10 +42,11 @@ namespace Gumgine
 				return 0;
 				case WM_CLOSE:
 				{
-					isEnd = true;
-					PostQuitMessage( 0 );
+					DestroyWindow( hwnd );
 				}
 				return 0;
+				default:
+				break;
 			}
 			return DefWindowProc( hwnd , msg , wParam , lParam );
 		}
