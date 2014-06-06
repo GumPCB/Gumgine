@@ -13,20 +13,24 @@ namespace Gumgine
 			HINSTANCE		hInstance = nullptr;
 			unsigned int	width = 640;
 			unsigned int	height = 480;
+			std::wstring	titleName;
+			bool			isEnd = false;
 
 		public:
 			Window();
 			virtual ~Window();
 
 		public:
-			bool			SetWin( HINSTANCE hInst , const std::wstring& pTitleName , unsigned int width = 640 , unsigned int height = 480 );
+			virtual bool	SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 );
 			//void			SetWindowSize( DWORD width , DWORD height );
-			virtual int				Run();
 			virtual LRESULT MsgProc( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam );
 
 			const HWND		GetHWND() const { return hWnd; }
 			const int		GetWidth() const { return width; }
 			const int		GetHeight() const { return height; }
+
+		protected:
+			virtual bool	SetWindow();
 
 		};
 	}

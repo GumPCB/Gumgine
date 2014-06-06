@@ -1,9 +1,11 @@
 #pragma once
+#include <iostream>
 #include <Windows.h>
 //#include <stdlib.h>
 //#include <atlconv.h>
 #include <tchar.h>
 #include <D3D11.h>
+//#include <d3d11_2.h>
 //#include <d3d9.h>
 //#include <d3dx9.h>
 #include <xinput.h>
@@ -34,6 +36,18 @@
 #define NEW_CLEAR( Var , Type )				{ if( !Var ) Var = new Type(); if( Var ) memset( Var, 0, sizeof( Type ) ); }
 #define NEW_ARRAY_CLEAR( Var , Type , Num )	{ if( !Var && Num ) Var = new Type[ Num ]; if( Var ) memset( Var, 0, sizeof( Type ) * Num ); }
 #define SAFE_STL_CONTAINER_DELETE( Var )	{ for ( auto iter = Var.begin() ; iter != Var.end() ; ++iter ) SAFE_DEL( *iter ); }
+
+#define IF_FALSE_RETURN_FALSE( Func )		{ if( ( Func ) == false ) { return false; } }
+#define IF_NULL_RETURN_FALSE( Ptr )			{ if( ( Ptr ) == nullptr ) return false; }
+#define IF_FAILED_RETURN_FALSE( Hr )		{ if( FAILED( ( Hr ) ) ) return false; }
+
+#define IF_FALSE_BREAK( Func )				{ if( ( Func ) == false ) break; }
+#define IF_NULL_BREAK( Ptr )				{ if( ( Ptr ) == nullptr ) break; }
+#define IF_FAILED_BREAK( Hr )				{ if( FAILED( ( Hr ) ) ) break; }
+
+#define IF_FALSE_MSGBOX_RETURN_FALSE( Func, Msg )		{ if( ( Func ) == false ) { MessageBox( nullptr , Msg , nullptr , 0 ); return false; } }
+#define IF_NULL_MSGBOX_RETURN_FALSE( Ptr, Msg )			{ if( ( Ptr ) == nullptr ) { MessageBox( nullptr , Msg , nullptr , 0 ); return false; } }
+#define IF_FAILED_MSGBOX_RETURN_FALSE( Hr, Msg )		{ if( FAILED( ( Hr ) ) ) { MessageBox( nullptr , Msg , nullptr , 0 ); return false; } }
 //#define TEX_PATH_WCHAR				L"..\\data\\TEX\\"
 
 //extern DWORD				g_Screen_X_Size;

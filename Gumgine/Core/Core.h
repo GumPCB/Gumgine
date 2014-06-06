@@ -9,7 +9,7 @@ namespace Gumgine
 	}
 	namespace Core
 	{
-		class Core : public Gumgine::Core::D3D , public Gumgine::GumCore
+		class Core : public Gumgine::Core::D3D
 		{
 		private:
 			Gumgine::Util::Timer*	coreTimer = nullptr;
@@ -19,12 +19,14 @@ namespace Gumgine
 			virtual ~Core();
 		
 			//모든 클래스는 반드시 아래의 함수를 정의한다.
-			virtual bool	Init() override;
-			virtual bool	Frame() override;
-			virtual bool	Render() override;
-			virtual bool	Release() override;
+			virtual bool	Init() = 0;
+			virtual bool	Frame() = 0;
+			virtual bool	Render() = 0;
+			virtual bool	Release() = 0;
 		
-			int		Run();
+			int				Run();
+
+			virtual bool	SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 ) override;
 
 		private:
 			//계산

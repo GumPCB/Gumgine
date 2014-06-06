@@ -1,4 +1,3 @@
-#include <iostream>
 #include "DeviceSample.h"
 
 
@@ -36,7 +35,10 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
 	//_CrtSetBreakAlloc( 319 );
 
-	const int maxThreadNum = 4;
+	std::mutex mutex;
+	std::lock_guard< std::mutex > lock( mutex );
+
+	const int maxThreadNum = 1;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
@@ -56,5 +58,5 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 	}
 	threadPool.clear();
 
-	return 1;
+	return 0;
 }

@@ -42,7 +42,7 @@ namespace Gumgine
 
 		protected:
 			virtual bool SetDevice();
-			virtual bool Release();
+			bool Release();
 		};
 	}
 }

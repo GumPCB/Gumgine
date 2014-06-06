@@ -5,10 +5,12 @@
 int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )
 {
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
+	//_CrtSetBreakAlloc( 319 );
+
 	std::mutex mutex;
 	std::lock_guard< std::mutex > lock( mutex );
 
-	const int maxThreadNum = 8;
+	const int maxThreadNum = 64;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{

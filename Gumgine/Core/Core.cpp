@@ -17,13 +17,13 @@ namespace Gumgine
 
 		int Core::Run()
 		{
-			CoreInit();
+			IF_FALSE_RETURN_FALSE( CoreInit() );
 			ShowWindow( GetHWND() , SW_SHOWDEFAULT );
-			UpdateWindow( GetHWND() );
+			IF_FALSE_RETURN_FALSE( UpdateWindow( GetHWND() ) );
 
 			MSG msg;
 			ZeroMemory( &msg , sizeof( msg ) );
-			while ( msg.message != WM_QUIT )
+			while ( msg.message != WM_QUIT && this->isEnd != true )
 			{
 				if ( PeekMessage( &msg , GetHWND() , 0U , 0U , PM_REMOVE ) )
 				{
@@ -32,32 +32,42 @@ namespace Gumgine
 				}
 				else
 				{
-					CoreFrame();
-					CoreRender();
+					IF_FALSE_BREAK( CoreFrame() );
+					IF_FALSE_BREAK( CoreRender() );
 				}
-				Sleep( 0 );
+				Sleep( 1 );
 			}
 			CoreRelease();
 			return ( int ) msg.wParam;
 		}
 
-		// Init //////////////////////////////////////////////////////////////////////
-		bool Core::CoreInit()
+		bool Core::SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
 		{
-			PreCoreInit();
-			Init();
-			return PostCoreInit();
-		}
-
-		bool Core::Init()
-		{
+			this->titleName = titleName;
+			this->width = width;
+			this->height = height;
+			this->hInstance = hInst;
 			return true;
 		}
 
+		// Init //////////////////////////////////////////////////////////////////////
+		bool Core::CoreInit()
+		{
+			IF_FALSE_RETURN_FALSE( PreCoreInit() );
+			IF_FALSE_RETURN_FALSE( Init() );
+			return PostCoreInit();
+		}
+
+		//bool Core::Init()
+		//{
+		//	return true;
+		//}
+
 		bool Core::PreCoreInit()
 		{
-			SetDevice();
-			coreTimer->Init();
+			IF_FALSE_RETURN_FALSE( SetWindow() );
+			IF_FALSE_RETURN_FALSE( SetDevice() );
+			IF_FALSE_RETURN_FALSE( coreTimer->Init() );
 			//I_Input.Init();
 			//I_Xbox360Controller.Init();
 			//I_CameraMgr.Init();
@@ -77,19 +87,19 @@ namespace Gumgine
 		// Frame /////////////////////////////////////////////////////////////////////
 		bool Core::CoreFrame()
 		{
-			PreCoreFrame();
-			Frame();
+			IF_FALSE_RETURN_FALSE( PreCoreFrame() );
+			IF_FALSE_RETURN_FALSE( Frame() );
 			return PostCoreFrame();
 		}
 
-		bool Core::Frame()
-		{
-			return true;
-		}
+		//bool Core::Frame()
+		//{
+		//	return true;
+		//}
 
 		bool Core::PreCoreFrame()
 		{
-			coreTimer->Frame();
+			IF_FALSE_RETURN_FALSE( coreTimer->Frame() );
 			//I_Input.Frame();
 			//I_Xbox360Controller.Frame();
 			//I_Debug.Frame();
@@ -108,15 +118,15 @@ namespace Gumgine
 		// Rander ////////////////////////////////////////////////////////////////////
 		bool Core::CoreRender()
 		{
-			PreCoreRender();
-			Render();
+			IF_FALSE_RETURN_FALSE( PreCoreRender() );
+			IF_FALSE_RETURN_FALSE( Render() );
 			return PostCoreRender();
 		}
 
-		bool Core::Render()
-		{
-			return true;
-		}
+		//bool Core::Render()
+		//{
+		//	return true;
+		//}
 
 		bool Core::PreCoreRender()
 		{
@@ -148,10 +158,10 @@ namespace Gumgine
 			return PostCoreRelease();
 		}
 
-		bool Core::Release()
-		{
-			return true;
-		}
+		//bool Core::Release()
+		//{
+		//	return true;
+		//}
 
 		bool Core::PreCoreRelease()
 		{
