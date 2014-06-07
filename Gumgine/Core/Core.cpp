@@ -41,12 +41,11 @@ namespace Gumgine
 			return ( int ) msg.wParam;
 		}
 
-		bool Core::SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
+		bool Core::SetWin( const std::wstring& titleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
 		{
 			this->titleName = titleName;
 			this->width = width;
 			this->height = height;
-			this->hInstance = hInst;
 			return true;
 		}
 

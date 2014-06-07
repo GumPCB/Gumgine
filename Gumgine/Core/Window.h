@@ -10,18 +10,18 @@ namespace Gumgine
 		{
 		protected:
 			HWND			hWnd = nullptr;
-			HINSTANCE		hInstance = nullptr;
+			HINSTANCE		hInstance = ( HINSTANCE ) GetModuleHandle( NULL );
 			unsigned int	width = 640;
 			unsigned int	height = 480;
 			std::wstring	titleName;
 			bool			isEnd = false;
 
 		public:
-			Window();
+			explicit Window();
 			virtual ~Window();
 
 		public:
-			virtual bool	SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 );
+			virtual bool	SetWin( const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 );
 			//void			SetWindowSize( DWORD width , DWORD height );
 			virtual LRESULT MsgProc( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam );
 

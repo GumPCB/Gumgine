@@ -15,12 +15,11 @@ namespace Gumgine
 			Gumgine::Singleton::GlobalVariables::GetInstance().SetWindow( nullptr );
 		}
 
-		bool Window::SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
+		bool Window::SetWin( const std::wstring& titleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
 		{
 			this->titleName = titleName;
 			this->width = width;
 			this->height = height;
-			this->hInstance = hInst;
 			IF_FALSE_RETURN_FALSE( SetWindow() );
 			return true;
 		}

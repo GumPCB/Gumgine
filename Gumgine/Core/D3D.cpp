@@ -17,9 +17,12 @@ namespace Gumgine
 
 		bool D3D::SetDevice()
 		{
+			// SetDevice는 한번에 하나씩
+			static std::mutex mutex;
+			std::lock_guard< std::mutex > lock( mutex );
+
 			// create d3d11 device
 			unsigned int createDeviceFlags = 0;
-
 # if defined ( DEBUG ) || defined ( _DEBUG )
 			createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
@@ -36,7 +39,7 @@ namespace Gumgine
 														);
 
 			IF_FAILED_MSGBOX_RETURN_FALSE( hrCreateDevice , L"D3D11CreateDevice Failed." );
-			IF_FAILED_MSGBOX_RETURN_FALSE( featureLevel < D3D_FEATURE_LEVEL_11_0 , L"Direct3D Feature Level 11 unsupported." );
+			IF_FALSE_MSGBOX_RETURN_FALSE( featureLevel >= D3D_FEATURE_LEVEL_11_0 , L"Direct3D Feature Level 11 unsupported." );
 
 			// Get 4xMSAA Quality
 			HRESULT hrMsaa = d3dDevice->CheckMultisampleQualityLevels( DXGI_FORMAT_R8G8B8A8_UNORM , 4 , &max4xMsaaQuality );
@@ -90,7 +93,14 @@ namespace Gumgine
 				SAFE_RELEASE( dxgiAdapter );
 				return false;
 			}
-			dxgiFactory->CreateSwapChain( d3dDevice , &sd , &swapChain );
+			if ( FAILED( dxgiFactory->CreateSwapChain( d3dDevice , &sd , &swapChain ) ) )
+			{
+				MessageBox( nullptr , L"CreateSwapChain Failed." , nullptr , 0 );
+				SAFE_RELEASE( dxgiDevice );
+				SAFE_RELEASE( dxgiAdapter );
+				SAFE_RELEASE( dxgiFactory );
+				return false;
+			}
 			SAFE_RELEASE( dxgiDevice );
 			SAFE_RELEASE( dxgiAdapter );
 			SAFE_RELEASE( dxgiFactory );

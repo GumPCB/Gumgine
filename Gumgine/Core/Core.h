@@ -26,7 +26,7 @@ namespace Gumgine
 		
 			int				Run();
 
-			virtual bool	SetWin( HINSTANCE hInst , const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 ) override;
+			virtual bool	SetWin( const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 ) override;
 
 		private:
 			//°è»ê
