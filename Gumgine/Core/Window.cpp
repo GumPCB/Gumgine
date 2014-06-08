@@ -7,12 +7,12 @@ namespace Gumgine
 	{
 		Window::Window()
 		{
-			Gumgine::Singleton::GlobalVariables::GetInstance().SetWindow( this );
+			Gumgine::Singleton::ThreadSingleton< Window >::GetInstance().SetPtr( this );
 		}
 
 		Window::~Window()
 		{
-			Gumgine::Singleton::GlobalVariables::GetInstance().SetWindow( nullptr );
+			Gumgine::Singleton::ThreadSingleton< Window >::GetInstance().Clear();
 		}
 
 		bool Window::SetWin( const std::wstring& titleName , unsigned int width /*640*/ , unsigned int height /*480*/ )
@@ -61,7 +61,7 @@ namespace Gumgine
 				, CS_HREDRAW | CS_VREDRAW	//CS_CLASSDC
 				, []( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam )->LRESULT
 				{
-					auto win = Gumgine::Singleton::GlobalVariables::GetInstance().GetWindow();
+					auto win = Gumgine::Singleton::ThreadSingleton< Window >::GetInstance().GetPtr();
 					if ( win != nullptr )
 					{
 						return win->MsgProc( hwnd , msg , wParam , lParam );

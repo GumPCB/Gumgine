@@ -2,15 +2,45 @@
 #include <Windows.h>
 #include "../Gumgine/Core/Window.h"
 
-int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )
+void testThread2()
 {
-	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
-	//_CrtSetBreakAlloc( 319 );
+	const int maxThreadNum = 4096;
+	std::vector< std::thread > threadPool;
+	for ( int i = 1; i <= maxThreadNum; ++i )
+	{
+		threadPool.push_back( std::thread( [ = ]()
+		{
+			Gumgine::Core::Window window;
+		} ) );
+	}
 
-	std::mutex mutex;
-	std::lock_guard< std::mutex > lock( mutex );
+	for ( auto &thread : threadPool )
+	{
+		thread.join();
+	}
+}
 
-	const int maxThreadNum = 64;
+void testThread()
+{
+	const int maxThreadNum = 8;
+	std::vector< std::thread > threadPool;
+	for ( int i = 1; i <= maxThreadNum; ++i )
+	{
+		threadPool.push_back( std::thread( [ = ]()
+		{
+			testThread2();
+		} ) );
+	}
+
+	for ( auto &thread : threadPool )
+	{
+		thread.join();
+	}
+}
+
+void MakeWindow()
+{
+	const int maxThreadNum = 4;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
@@ -19,8 +49,8 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 			std::wstring threadName = L"T" + std::to_wstring( i );
 			std::wcout << threadName << L", pid = " << std::this_thread::get_id() << std::endl;
 			Gumgine::Core::Window window;
-			window.SetWin( hInst , threadName , 800 , 600 );
-			window.Run();
+			//window.SetWin( threadName , 800 , 600 );
+			//window.Run();
 		} ) );
 	}
 
@@ -28,6 +58,18 @@ int WINAPI wWinMain( HINSTANCE hInst , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lp
 	{
 		thread.join();
 	}
+}
 
-	return 1;
+int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )
+{
+	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
+	//_CrtSetBreakAlloc( 338 );
+
+	std::mutex mutex;
+	std::lock_guard< std::mutex > lock( mutex );
+
+	//MakeWindow();
+	testThread();
+
+	return 0;
 }
