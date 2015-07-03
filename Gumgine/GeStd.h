@@ -65,17 +65,7 @@
 
 namespace Gumgine
 {
-	template< class T > class GeSingleton
-	{
-	public:
-		static T& GetInstance()
-		{
-			static T theSingleInstance;
-			return theSingleInstance;
-		}
-	};
-
-	class GumCore
+	class IRenderable
 	{
 		virtual bool Init() = 0;	// 초기화
 		virtual bool Frame() = 0;	// 그리기 전에 할일

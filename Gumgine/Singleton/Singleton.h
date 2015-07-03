@@ -1,10 +1,5 @@
 #pragma once
+#include "BasicSingleton.h"
 #include "Global.h"
-
-namespace Gumgine
-{
-	namespace Singleton
-	{
-
-	}
-}
+#include "Factory.h"
+#include "Manager.h"

@@ -9,11 +9,13 @@ namespace Gumgine
 	}
 	namespace Singleton
 	{
-		// 쓰레드 번호를 기준으로 포인터를 하나씩 가지고 있는 싱글턴
-		template < class T > class ThreadSingleton : public Gumgine::GeSingleton< Gumgine::Singleton::ThreadSingleton< T > >
+		template< class T > class BasicSingleton;
+
+		//< 쓰레드 번호를 기준으로 포인터를 하나씩 가지고 있는 싱글턴
+		template < class T > class ThreadSingleton : public BasicSingleton< Gumgine::Singleton::ThreadSingleton< T > >
 		{
 		private:
-			friend class Gumgine::GeSingleton< Gumgine::Singleton::ThreadSingleton< T > >;
+			friend class BasicSingleton< Gumgine::Singleton::ThreadSingleton< T > >;
 			std::map< std::thread::id , T* > ptrList;
 			std::mutex mutex;
 		public:
@@ -44,7 +46,7 @@ namespace Gumgine
 			}
 		private:
 			ThreadSingleton() {};
-			~ThreadSingleton() { ptrList.clear(); };
+			virtual ~ThreadSingleton() { ptrList.clear(); };
 		};
 	}
 }

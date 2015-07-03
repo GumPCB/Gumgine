@@ -5,7 +5,7 @@ namespace Gumgine
 {
 	namespace Util
 	{
-		class Timer : public GumCore
+		class Timer : public Gumgine::IRenderable
 		{
 		private:
 			__int64 start = 0;
