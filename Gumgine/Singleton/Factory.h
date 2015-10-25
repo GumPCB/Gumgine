@@ -19,28 +19,78 @@ namespace Gumgine
 
 		public:
 			//< 力前 殿废
-			void Register( const std::wstring& productName, std::function< T* () > Func )
+			void RegisterType( const std::wstring& typeName, std::function< T* () > createFunc )
 			{
-				assert( Products.find( productName ) == Products.end() ); //"Already registered product."
-				Products[ productName ] = Func;
+				assert( Products.find( typeName ) == Products.end() ); //"Already registered product."
+				Products[ typeName ] = createFunc;
 			}
 			//< 力前 林巩
-			virtual T* Create( const std::wstring& productName )
+			virtual T* Create( const std::wstring& typeName )
 			{
-				if ( Products.find( productName ) == Products.end() )
+				if ( Products.find( typeName ) == Products.end() )
 				{
 					return nullptr;
 				}
-				return Products[ productName ]();
+				return Products[ typeName ]();
 			}
 		private:
-			std::map < std::wstring , std::function< T* () > > Products;
+			std::map< std::wstring , std::function< T* () > > Products;
 		};
 
-		template < typename Parents, typename Child >
-		Parents* CreateFunc()
+
+
+		template < class T >
+		class SharedFactory : public BasicSingleton< Gumgine::Singleton::SharedFactory< T > >
+		{
+		private:
+			friend class BasicSingleton< Gumgine::Singleton::SharedFactory< T > >;
+
+		private:
+			SharedFactory() {};
+			virtual ~SharedFactory() {};
+
+		public:
+			//< 力前 殿废
+			void RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< T >( ) > createFunc )
+			{
+				assert( Products.find( typeName ) == Products.end() ); //"Already registered product."
+				Products[ typeName ] = createFunc;
+			}
+			//< 力前 林巩
+			virtual std::shared_ptr< T > Create( const std::wstring& typeName )
+			{
+				if( Products.find( typeName ) == Products.end() )
+				{
+					return nullptr;
+				}
+				return Products[ typeName ]();
+			}
+		private:
+			std::map< std::wstring , std::function< std::shared_ptr< T >( ) > > Products;
+		};
+
+		template < typename Parents >
+		Parents* CreatePtrFunc()
+		{
+			return new Parents;
+		}
+
+		template < typename Parents , typename Child >
+		Parents* CreatePtrFunc()
 		{
 			return ( Parents* ) new Child;
+		}
+
+		template < typename Parents >
+		std::shared_ptr< Parents > CreateSharedPtrFunc()
+		{
+			return std::make_shared< Parents >();
+		}
+
+		template < typename Parents , typename Child >
+		std::shared_ptr< Parents > CreateSharedPtrFunc()
+		{
+			return std::make_shared< Child >();
 		}
 	}
 }

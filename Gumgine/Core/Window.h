@@ -21,7 +21,7 @@ namespace Gumgine
 			virtual ~Window();
 
 		public:
-			virtual bool	SetWin( const std::wstring& titleName , unsigned int width = 640 , unsigned int height = 480 );
+			virtual bool	SetWin( const std::wstring& _titleName , unsigned int _width = 640 , unsigned int _height = 480 );
 			//void			SetWindowSize( DWORD width , DWORD height );
 			virtual LRESULT MsgProc( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam );
 

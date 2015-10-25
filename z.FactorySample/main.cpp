@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include "../Gumgine/Singleton/Singleton.h"
 
-class AAA
+class AAA : public Gumgine::IManagedRenderable
 {
 public:
 	AAA() {};
@@ -11,9 +11,25 @@ public:
 	{
 		std::cout << L"AAA" << std::endl;
 	}
+	virtual bool Init() override						// 초기화
+	{
+		return true;
+	}
+	virtual bool Frame() override						// 그리기 전에 할일
+	{
+		return true;
+	}
+	virtual bool Render() override						// 화면에 그릴때
+	{
+		return true;
+	}
+	virtual bool Release() override					// 자원 해제
+	{
+		return true;
+	}
 };
 
-class BBB : AAA
+class BBB : public AAA
 {
 public:
 	BBB() {};
@@ -24,7 +40,7 @@ public:
 	}
 };
 
-class CCC : AAA
+class CCC : public AAA
 {
 public:
 	CCC() {};
@@ -35,30 +51,44 @@ public:
 	}
 };
 
+class AAAManager : public Gumgine::Singleton::Manager< AAAManager , AAA >
+{
+private:
+	friend class Gumgine::Singleton::Manager< AAAManager , AAA >;
+private:
+	virtual ~AAAManager() {};
+};
+
 int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )
 {
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //검출 소스
 
 	//_CrtSetBreakAlloc( 338 );
-	//auto &aaaFactory = Gumgine::Singleton::Manager< AAA >::GetInstance();
-	auto &aaaFactory = Gumgine::Singleton::Factory< AAA >::GetInstance();
-	aaaFactory.Register( L"BBB" , Gumgine::Singleton::CreateFunc< AAA , BBB > );
+	auto &aaaFactory = AAAManager::GetInstance();
+	//auto &aaaFactory = Gumgine::Singleton::Factory< AAA >::GetInstance();
+	aaaFactory.RegisterType( L"AAA" , Gumgine::Singleton::CreateSharedPtrFunc< AAA > );
+	aaaFactory.RegisterType( L"BBB" , Gumgine::Singleton::CreateSharedPtrFunc< AAA , BBB > );
+	aaaFactory.RegisterType( L"CCC" , Gumgine::Singleton::CreateSharedPtrFunc< AAA , CCC > );
 
-	//aaaFactory.Register( L"CCC" , []() -> AAA*
+	//aaaFactory.RegisterType( L"CCC" , []() -> AAA*
 	//{
 	//	return ( AAA* )new CCC;
 	//} );
 
-	//auto bbbbb = aaaFactory.Create( L"BBB" );
-	//bbbbb->print();
+	auto index = aaaFactory.Create( L"b1", L"BBB" );
+	auto bbbbb = aaaFactory.GetPtr( index );
+	bbbbb->print();
 	//SAFE_DEL( bbbbb );
 
-	//bbbbb = aaaFactory.Create( L"CCC" );
-	//bbbbb->print();
+	index = aaaFactory.Create( L"c1", L"CCC" );
+	bbbbb = aaaFactory.GetPtr( index );
+	bbbbb->print();
 	//SAFE_DEL( bbbbb );
 
-	//bbbbb = aaaFactory.Create( L"AAA" );
-	////bbbbb->print();
+	index = aaaFactory.Create( L"a1", L"AAA" );
+	bbbbb = aaaFactory.GetPtr( index );
+	bbbbb->print();
+	//bbbbb->print();
 	//SAFE_DEL( bbbbb );
 
 	return 0;

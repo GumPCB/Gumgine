@@ -13,5 +13,15 @@ namespace Gumgine
 				return theSingleInstance;
 			}
 		};
+
+		template< class manager , class managed > class ManagerSingleton
+		{
+		public:
+			static manager& GetInstance()
+			{
+				static manager theSingleInstance;
+				return theSingleInstance;
+			}
+		};
 	}
 }

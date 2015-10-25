@@ -1,250 +1,198 @@
 #pragma once
 #include "../GeStd.h"
-//#include "Factory.h"
 
 namespace Gumgine
 {
 	namespace Singleton
 	{
 		template< class T > class BasicSingleton;
-		template< class T > class Factory;
+		template< class T > class SharedFactory;
 
 		// 펙토리는 들고있고 싱글턴을 상속받고 펙토리의 인터페이스는 연결해주는 방식으로 만들자
 		// 펙토리의 Create 함수 이름을 다른 것으로 바꾸자
-		template< class T >
-		class Manager : public BasicSingleton< Gumgine::Singleton::Manager< T > > , Gumgine::IRenderable
+		template< class manager, class managed >
+		class Manager : public BasicSingleton< Gumgine::Singleton::Manager< manager, managed > > , Gumgine::IRenderable
 		{
 		private:
-			friend class BasicSingleton< Gumgine::Singleton::Manager< T > >;
-
-		private:
-			Manager() {};
-			virtual ~Manager() {};
+			friend class BasicSingleton< Gumgine::Singleton::Manager< manager, managed > >;
 
 		public:
-			void Register( const std::wstring& productName , std::function< T* ( ) > Func )
-			{
-				Gumgine::Singleton::Factory< T >::GetInstance().Register( productName , Func );
-			}
-			//virtual T* Make( const std::wstring& productName )
-			//{
-			//	return Gumgine::Singleton::Factory< T >::GetInstance().Create( productName );
-			//}
+			Manager() {};
+			virtual ~Manager();
+
+		public:
+			void RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< managed >() > createFunc );
 
 			//무조건 추가
-			unsigned int	Add( const std::wstring& name );
+			unsigned int				Add( const std::wstring& name );
+			unsigned int				Add( const std::wstring& name, const std::wstring& typeName );
 			//추가, 중복되면 이미 있는것의 인덱스를 리턴
-			unsigned int	Create( const std::wstring& name );
+			unsigned int				Create( const std::wstring& name );
+			unsigned int				Create( const std::wstring& name, const std::wstring& typeName );
 
-			T*				GetPtr( const std::wstring& name );
-			T*				GetPtr( unsigned int index );
-			unsigned int	GetIndex( const std::wstring& name );
-			unsigned int	GetIndex( T* child );
+			std::shared_ptr< managed >	GetPtr( const std::wstring& name );
+			std::shared_ptr< managed >	GetPtr( unsigned int index );
+			unsigned int				GetIndex( const std::wstring& name );
+			unsigned int				GetIndex( std::shared_ptr< managed > child );
 
-			unsigned int	GetLastIndex() const { return curIndex; }
+			unsigned int				GetLastIndex() const { return curIndex; }
 
-			virtual bool	Init() override;	// 초기화
-			virtual bool	Frame() override;	// 그리기 전에 할일
-			virtual bool	Render() override;	// 화면에 그릴때
-			virtual bool	Release() override;	// 자원 해제
+			virtual bool				Init() override;	// 초기화
+			virtual bool				Frame() override;	// 그리기 전에 할일
+			virtual bool				Render() override;	// 화면에 그릴때
+			virtual bool				Release() override;	// 자원 해제
 
 		private:
-			std::map< int , T* >	managedObject;
-			unsigned int			curIndex = 0;
+			std::map< int , std::shared_ptr< managed > >	managedObjects;
+			unsigned int									curIndex = 0;
 		};
 
-		//template< typename Parent , typename Child , int N >
-		//class GumTemplate
-		//{
-		//public:
-		//	typedef	map <INT , Child*>						TemplateMap;
-		//	typedef typename map <INT , Child*>::iterator	TemplateMapItor;
-		//	TemplateMapItor									m_MapItor;
-		//	TemplateMap										m_Map;
-		//	DWORD											m_iCurIndex;
-		//public:
-		//	//무조건 추가
-		//	DWORD	Add( const TCHAR* pName );
-		//	//중복제거
-		//	DWORD	Create( const TCHAR* pName );
+		template< class manager , class managed >
+		Manager< manager , managed >::~Manager()
+		{
+			Release();
+			managedObjects.clear();
+			curIndex = 0;
+		}
 
-		//	Child*	GetPtr( const TCHAR* pName );
-		//	Child*	GetPtr( const DWORD& dwIndex );
-		//	DWORD	GetIndex( const TCHAR* pName );
-		//	DWORD	GetIndex( Child* pChild );
+		template< class manager , class managed >
+		void Manager< manager , managed >::RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< managed >() > createFunc )
+		{
+			Gumgine::Singleton::SharedFactory< managed >::GetInstance().RegisterType( typeName , createFunc );
+		}
 
-		//	DWORD	GetLastIndex() const { return m_iCurIndex; }
+		template< class manager , class managed >
+		unsigned int Manager< manager , managed >::Add( const std::wstring& name )
+		{
+			auto obj = std::make_shared< managed >();
+			obj->Init();
+			obj->SetName( name );
+			managedObjects.insert( make_pair( ++curIndex , obj ) );
 
-		//	bool	Init();
-		//	bool	Frame();
-		//	bool	Render();
-		//	bool	Release();
+			return curIndex;
+		}
 
-		//	GumTemplate( void );
-		//	~GumTemplate( void );
-		//};
+		template< class manager , class managed >
+		unsigned int Manager< manager , managed >::Add( const std::wstring& name , const std::wstring& typeName )
+		{
+			auto obj = Gumgine::Singleton::SharedFactory< managed >::GetInstance().Create( typeName );
+			obj->Init();
+			obj->SetName( name );
+			managedObjects.insert( make_pair( ++curIndex , obj ) );
 
-		//template< typename Parent , typename Child , int N >
-		//Child* GumTemplate<Parent , Child , N>::GetPtr( const TCHAR* pName )
-		//{
-		//	Child *pPoint;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		if ( pPoint->m_szName == pName )
-		//		{
-		//			return pPoint;
-		//		}
-		//	}
+			return curIndex;
+		}
 
-		//	return NULL;
-		//}
+		template< class manager , class managed >
+		unsigned int Manager< manager , managed >::Create( const std::wstring& name )
+		{
+			auto index = GetIndex( name );
+			if( index != 0 )
+			{
+				return index;
+			}
+			return Add( name );
+		}
 
-		//template< typename Parent , typename Child , int N >
-		//Child* GumTemplate<Parent , Child , N>::GetPtr( const DWORD& dwIndex )
-		//{
-		//	TemplateMapItor itor = m_Map.find( dwIndex );
-		//	if ( itor == m_Map.end() ) return NULL;
+		template< class manager , class managed >
+		unsigned int Manager< manager , managed >::Create( const std::wstring& name , const std::wstring& typeName )
+		{
+			auto index = GetIndex( name );
+			if( index != 0 )
+			{
+				return index;
+			}
+			return Add( name, typeName );
+		}
 
-		//	Child *pPoint;
-		//	pPoint = ( Child * ) ( *itor ).second;
-		//	return pPoint;
-		//}
+		template< class manager , class managed >
+		std::shared_ptr< managed > Manager< manager , managed >::GetPtr( const std::wstring& name )
+		{
+			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
+			{
+				if( iter->second->GetName() == name )
+				{
+					return iter->second;
+				}
+			}
+			return nullptr;
+		}
 
-		//template< typename Parent , typename Child , int N >
-		//DWORD GumTemplate<Parent , Child , N>::GetIndex( const TCHAR* pName )
-		//{
-		//	Child *pPoint;
-		//	DWORD dwResult = 0;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		++dwResult;
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		if ( pPoint->m_szName == pName )
-		//		{
-		//			return dwResult;
-		//		}
-		//	}
+		template< class manager , class managed >
+		std::shared_ptr< managed > Manager< manager , managed >::GetPtr( unsigned int index )
+		{
+			auto iter = managedObjects.find( index );
+			if( iter != managedObjects.end() )
+			{
+				return iter->second;
+			}			
+			return nullptr;
+		}
 
-		//	return 0;
-		//}
+		template< class manager , class managed >
+		unsigned int Manager< manager , managed >::GetIndex( const std::wstring& name )
+		{
+			for( auto iter = managedObjects.cbegin() ; iter != managedObjects.cend() ; ++iter )
+			{
+				if( iter->second->GetName() == name )
+				{
+					return iter->first;
+				}
+			}
+			return 0;
+		}
 
-		//template< typename Parent , typename Child , int N >
-		//DWORD GumTemplate<Parent , Child , N>::GetIndex( Child* pChild )
-		//{
-		//	Child *pPoint;
-		//	DWORD dwResult = 0;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		++dwResult;
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		if ( pPoint == pChild )
-		//		{
-		//			return dwResult;
-		//		}
-		//	}
+		template< class manager , class managed >
+		unsigned int Manager< manager , managed >::GetIndex( std::shared_ptr< managed > child )
+		{
+			for( auto iter = managedObjects.cbegin() ; iter != managedObjects.cend() ; ++iter )
+			{
+				if( iter->second == child )
+				{
+					return iter->first;
+				}
+			}
+			return 0;
+		}
 
-		//	return 0;
-		//}
+		template< class manager , class managed >
+		bool Manager< manager , managed >::Init()
+		{
+			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
+			{
+				iter->second->Init();
+			}
+			return true;
+		}
 
-		//template< typename Parent , typename Child , int N >
-		//bool GumTemplate<Parent , Child , N>::Init()
-		//{
-		//	Child *pPoint;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		pPoint->Init();
-		//	}
-		//	return true;
-		//}
+		template< class manager , class managed >
+		bool Manager< manager , managed >::Frame()
+		{
+			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
+			{
+				iter->second->Frame();
+			}
+			return true;
+		}
 
-		//template< typename Parent , typename Child , int N >
-		//bool GumTemplate<Parent , Child , N>::Frame()
-		//{
-		//	Child *pPoint;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		pPoint->Frame();
-		//	}
-		//	return true;
-		//}
+		template< class manager , class managed >
+		bool Manager< manager , managed >::Render()
+		{
+			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
+			{
+				iter->second->Render();
+			}
+			return true;
+		}
 
-		//template< typename Parent , typename Child , int N >
-		//bool GumTemplate<Parent , Child , N>::Render()
-		//{
-		//	Child *pPoint;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		pPoint->Render();
-		//	}
-		//	return true;
-		//}
-
-		//template< typename Parent , typename Child , int N >
-		//bool GumTemplate<Parent , Child , N>::Release()
-		//{
-		//	Child *pPoint;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		pPoint->Release();
-		//	}
-		//	return true;
-		//}
-
-		//template< typename Parent , typename Child , int N >
-		//GumTemplate<Parent , Child , N>::GumTemplate( void )
-		//{
-		//	m_iCurIndex = 0;
-		//	m_Map.clear();
-		//}
-
-		//template< typename Parent , typename Child , int N >
-		//GumTemplate<Parent , Child , N>::~GumTemplate( void )
-		//{
-		//	Child *pPoint;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		pPoint->Release();
-		//		SAFE_DEL( pPoint );
-		//	}
-		//	m_Map.clear();
-		//	m_iCurIndex = 0;
-		//}
-
-		////무조건 추가
-		//template< typename Parent , typename Child , int N >
-		//DWORD GumTemplate<Parent , Child , N>::Add( const TCHAR* pName )
-		//{
-		//	Child* pPoint = NULL;
-		//	SAFE_NEW( pPoint , Child );
-		//	pPoint->Init();
-		//	pPoint->m_szName = pName;
-		//	m_Map.insert( make_pair( ++m_iCurIndex , pPoint ) );
-
-		//	return m_iCurIndex;
-		//}
-		////중복제거
-		//template< typename Parent , typename Child , int N >
-		//DWORD GumTemplate<Parent , Child , N>::Create( const TCHAR* pName )
-		//{
-		//	Child *pPoint;
-		//	DWORD dwResult = 0;
-		//	for ( TemplateMapItor itor = m_Map.begin(); itor != m_Map.end(); ++itor )
-		//	{
-		//		++dwResult;
-		//		pPoint = ( Child * ) ( *itor ).second;
-		//		if ( pPoint->m_szName == pName )
-		//		{
-		//			return dwResult;
-		//		}
-		//	}
-
-		//	return Add( pName );
-		//}
+		template< class manager , class managed >
+		bool Manager< manager , managed >::Release()
+		{
+			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
+			{
+				iter->second->Release();
+			}
+			return true;
+		}
 	}
 }

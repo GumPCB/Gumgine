@@ -67,9 +67,29 @@ namespace Gumgine
 {
 	class IRenderable
 	{
+	public:
 		virtual bool Init() = 0;	// 초기화
 		virtual bool Frame() = 0;	// 그리기 전에 할일
 		virtual bool Render() = 0;	// 화면에 그릴때
 		virtual bool Release() = 0; // 자원 해제
+	};
+
+	class IManagedRenderable : IRenderable
+	{
+	public:
+		virtual bool Init() override = 0;						// 초기화
+		virtual bool Frame() override = 0;						// 그리기 전에 할일
+		virtual bool Render() override = 0;						// 화면에 그릴때
+		virtual bool Release() override = 0;					// 자원 해제
+		virtual void SetName( const std::wstring& _name )		// 객체의 이름설정
+		{
+			name = _name;
+		}
+		virtual const std::wstring& GetName()					// 객체의 이름리턴
+		{
+			return name;
+		}
+	protected:
+		std::wstring name;
 	};
 }
