@@ -51,6 +51,33 @@ public:
 	}
 };
 
+class DDD : public Gumgine::IManagedRenderable
+{
+public:
+	DDD() {};
+	~DDD() {};
+	virtual void print()
+	{
+		std::cout << L"DDD" << std::endl;
+	}
+	virtual bool Init() override						// 초기화
+	{
+		return true;
+	}
+	virtual bool Frame() override						// 그리기 전에 할일
+	{
+		return true;
+	}
+	virtual bool Render() override						// 화면에 그릴때
+	{
+		return true;
+	}
+	virtual bool Release() override					// 자원 해제
+	{
+		return true;
+	}
+};
+
 class AAAManager : public Gumgine::Singleton::Manager< AAAManager , AAA >
 {
 private:
@@ -67,8 +94,9 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 	auto &aaaFactory = AAAManager::GetInstance();
 	//auto &aaaFactory = Gumgine::Singleton::Factory< AAA >::GetInstance();
 	aaaFactory.RegisterType( L"AAA" , Gumgine::Singleton::CreateSharedPtrFunc< AAA > );
-	aaaFactory.RegisterType( L"BBB" , Gumgine::Singleton::CreateSharedPtrFunc< AAA , BBB > );
-	aaaFactory.RegisterType( L"CCC" , Gumgine::Singleton::CreateSharedPtrFunc< AAA , CCC > );
+	aaaFactory.RegisterType( L"BBB" , Gumgine::Singleton::CreateSharedPtrFunc< BBB > );
+	aaaFactory.RegisterType( L"CCC" , Gumgine::Singleton::CreateSharedPtrFunc< CCC > );
+	// aaaFactory.RegisterType( L"DDD" , Gumgine::Singleton::CreateSharedPtrFunc< DDD > ); // 당연히 이건 안됨
 
 	//aaaFactory.RegisterType( L"CCC" , []() -> AAA*
 	//{

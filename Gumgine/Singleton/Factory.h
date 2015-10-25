@@ -86,11 +86,5 @@ namespace Gumgine
 		{
 			return std::make_shared< Parents >();
 		}
-
-		template < typename Parents , typename Child >
-		std::shared_ptr< Parents > CreateSharedPtrFunc()
-		{
-			return std::make_shared< Child >();
-		}
 	}
 }
