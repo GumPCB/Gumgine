@@ -94,7 +94,12 @@ namespace Gumgine
 									   , wc.hInstance
 									   , nullptr
 									   );
-			IF_NULL_MSGBOX_RETURN_FALSE( this->hWnd , L"CreateWindow Failed." );
+
+			if ( this->hWnd == nullptr )
+			{
+				MessageBox( nullptr, L"CreateWindow Failed.", nullptr, 0 );
+				return false;
+			}
 			return true;
 		}
 	}

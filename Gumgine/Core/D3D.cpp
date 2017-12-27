@@ -38,13 +38,25 @@ namespace Gumgine
 														, &d3dImmediateContext
 														);
 
-			IF_FAILED_MSGBOX_RETURN_FALSE( hrCreateDevice , L"D3D11CreateDevice Failed." );
-			IF_FALSE_MSGBOX_RETURN_FALSE( featureLevel >= D3D_FEATURE_LEVEL_11_0 , L"Direct3D Feature Level 11 unsupported." );
+			if ( FAILED( hrCreateDevice ) )
+			{
+				MessageBox( nullptr, L"D3D11CreateDevice Failed.", nullptr, 0 );
+				return false;
+			}
+			if ( featureLevel < D3D_FEATURE_LEVEL_11_0 )
+			{
+				MessageBox( nullptr, L"Direct3D Feature Level 11 unsupported.", nullptr, 0 );
+				return false;
+			}
 
 			// Get 4xMSAA Quality
 			HRESULT hrMsaa = d3dDevice->CheckMultisampleQualityLevels( DXGI_FORMAT_R8G8B8A8_UNORM , 4 , &max4xMsaaQuality );
 			assert( max4xMsaaQuality > 0 );
-			IF_FAILED_MSGBOX_RETURN_FALSE( hrMsaa , L"4xMSAA Quality Get Failed." );
+			if ( FAILED( hrMsaa ) )
+			{
+				MessageBox( nullptr, L"4xMSAA Quality Get Failed.", nullptr, 0 );
+				return false;
+			}
 
 			// Set SWAP CHAIN
 			DXGI_SWAP_CHAIN_DESC sd;
@@ -76,7 +88,11 @@ namespace Gumgine
 
 			// Create SWAP CHAIN
 			IDXGIDevice* dxgiDevice = nullptr;
-			IF_FAILED_MSGBOX_RETURN_FALSE( d3dDevice->QueryInterface( __uuidof( IDXGIDevice ) , ( void** ) &dxgiDevice ) , L"IDXGIDevice Failed." );
+			if ( FAILED( d3dDevice->QueryInterface( __uuidof( IDXGIDevice ), ( void** ) &dxgiDevice ) ) )
+			{
+				MessageBox( nullptr, L"IDXGIDevice Failed.", nullptr, 0 );
+				return false;
+			}
 
 			IDXGIAdapter* dxgiAdapter = nullptr;
 			if ( FAILED( dxgiDevice->GetParent( __uuidof( IDXGIAdapter ) , ( void** ) &dxgiAdapter ) ) )
@@ -107,8 +123,16 @@ namespace Gumgine
 
 			// Create RenderTarget View
 			ID3D11Texture2D* backBuffer = nullptr;
-			IF_FAILED_MSGBOX_RETURN_FALSE( swapChain->GetBuffer( 0 , __uuidof( ID3D11Texture2D ) , reinterpret_cast< void** >( &backBuffer ) ) , L"swapChain GetBuffer Failed." );
-			IF_FAILED_MSGBOX_RETURN_FALSE( d3dDevice->CreateRenderTargetView( backBuffer , 0 , &renderTargetView ) , L"CreateRenderTargetView Failed." );
+			if ( FAILED( swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), reinterpret_cast< void** >( &backBuffer ) ) ) )
+			{
+				MessageBox( nullptr, L"swapChain GetBuffer Failed.", nullptr, 0 );
+				return false;
+			}
+			if ( FAILED( d3dDevice->CreateRenderTargetView( backBuffer, 0, &renderTargetView ) ) )
+			{
+				MessageBox( nullptr, L"CreateRenderTargetView Failed.", nullptr, 0 );
+				return false;
+			}
 			SAFE_RELEASE( backBuffer );
 
 			// Create DepthStencil View
@@ -135,8 +159,16 @@ namespace Gumgine
 			depthStencilDesc.CPUAccessFlags = 0;
 			depthStencilDesc.MiscFlags = 0;
 
-			IF_FAILED_MSGBOX_RETURN_FALSE( d3dDevice->CreateTexture2D( &depthStencilDesc , 0 , &depthStencilBuffer ) , L"depthStencilBuffer CreateTexture2D Failed." );
-			IF_FAILED_MSGBOX_RETURN_FALSE( d3dDevice->CreateDepthStencilView( depthStencilBuffer , 0 , &depthStencilView ) , L"CreateDepthStencilView Failed." );
+			if ( FAILED( d3dDevice->CreateTexture2D( &depthStencilDesc, 0, &depthStencilBuffer ) ) )
+			{
+				MessageBox( nullptr, L"depthStencilBuffer CreateTexture2D Failed.", nullptr, 0 );
+				return false;
+			}
+			if ( FAILED( d3dDevice->CreateDepthStencilView( depthStencilBuffer, 0, &depthStencilView ) ) )
+			{
+				MessageBox( nullptr, L"CreateDepthStencilView Failed.", nullptr, 0 );
+				return false;
+			}
 
 			// Set RenderTargets
 			d3dImmediateContext->OMSetRenderTargets( 1 , &renderTargetView , depthStencilView );

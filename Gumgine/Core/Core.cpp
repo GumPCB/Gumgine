@@ -32,8 +32,8 @@ namespace Gumgine
 				}
 				else
 				{
-					IF_FALSE_BREAK( CoreFrame() );
-					IF_FALSE_BREAK( CoreRender() );
+					CoreFrame();
+					CoreRender();
 				}
 				Sleep( 1 );
 			}
