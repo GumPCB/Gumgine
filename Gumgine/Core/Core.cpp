@@ -17,9 +17,9 @@ namespace Gumgine
 
 		int Core::Run()
 		{
-			IF_FALSE_RETURN_FALSE( CoreInit() );
+			CoreInit();
 			ShowWindow( GetHWND() , SW_SHOWDEFAULT );
-			IF_FALSE_RETURN_FALSE( UpdateWindow( GetHWND() ) );
+			UpdateWindow( GetHWND() );
 
 			MSG msg;
 			ZeroMemory( &msg , sizeof( msg ) );
@@ -52,9 +52,10 @@ namespace Gumgine
 		// Init //////////////////////////////////////////////////////////////////////
 		bool Core::CoreInit()
 		{
-			IF_FALSE_RETURN_FALSE( PreCoreInit() );
-			IF_FALSE_RETURN_FALSE( Init() );
-			return PostCoreInit();
+			PreCoreInit();
+			Init();
+			PostCoreInit();
+			return true;
 		}
 
 		//bool Core::Init()
@@ -64,9 +65,9 @@ namespace Gumgine
 
 		bool Core::PreCoreInit()
 		{
-			IF_FALSE_RETURN_FALSE( SetWindow() );
-			IF_FALSE_RETURN_FALSE( SetDevice() );
-			IF_FALSE_RETURN_FALSE( coreTimer->Init() );
+			SetWindow();
+			SetDevice();
+			coreTimer->Init();
 			//I_Input.Init();
 			//I_Xbox360Controller.Init();
 			//I_CameraMgr.Init();
@@ -86,9 +87,10 @@ namespace Gumgine
 		// Frame /////////////////////////////////////////////////////////////////////
 		bool Core::CoreFrame()
 		{
-			IF_FALSE_RETURN_FALSE( PreCoreFrame() );
-			IF_FALSE_RETURN_FALSE( Frame() );
-			return PostCoreFrame();
+			PreCoreFrame();
+			Frame();
+			PostCoreFrame();
+			return true;
 		}
 
 		//bool Core::Frame()
@@ -98,7 +100,7 @@ namespace Gumgine
 
 		bool Core::PreCoreFrame()
 		{
-			IF_FALSE_RETURN_FALSE( coreTimer->Frame() );
+			coreTimer->Frame();
 			//I_Input.Frame();
 			//I_Xbox360Controller.Frame();
 			//I_Debug.Frame();
@@ -117,9 +119,10 @@ namespace Gumgine
 		// Rander ////////////////////////////////////////////////////////////////////
 		bool Core::CoreRender()
 		{
-			IF_FALSE_RETURN_FALSE( PreCoreRender() );
-			IF_FALSE_RETURN_FALSE( Render() );
-			return PostCoreRender();
+			PreCoreRender();
+			Render();
+			PostCoreRender();
+			return true;
 		}
 
 		//bool Core::Render()

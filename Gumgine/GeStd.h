@@ -28,18 +28,14 @@
 //using namespace std;
 
 #define SAFE_ZERO( Var )					{ Var = 0; }
-#define SAFE_NEW( Var , Type )				{ if( !Var ) Var = new Type; }
-#define SAFE_DEL( Var )						{ if( Var ) delete Var; ( Var ) = nullptr; }
-#define SAFE_ARRAY_NEW( Var , Type , Num )	{ if( !Var && Num ) Var = new Type[Num]; }
-#define SAFE_ARRAY_DEL( Var )				{ if( Var ) delete [] Var; ( Var ) = nullptr; }
-#define SAFE_RELEASE( Object )				{ if( Object ) { ( Object )->Release(); ( Object ) = nullptr; } }
-#define NEW_CLEAR( Var , Type )				{ if( !Var ) Var = new Type(); if( Var ) memset( Var, 0, sizeof( Type ) ); }
-#define NEW_ARRAY_CLEAR( Var , Type , Num )	{ if( !Var && Num ) Var = new Type[ Num ]; if( Var ) memset( Var, 0, sizeof( Type ) * Num ); }
+#define SAFE_NEW( Var , Type )				{ if( Var == nullptr ) Var = new Type; }
+#define SAFE_DEL( Var )						{ if( Var != nullptr ) delete Var; ( Var ) = nullptr; }
+#define SAFE_ARRAY_NEW( Var , Type , Num )	{ if( Var == nullptr && Num > 0 ) Var = new Type[Num]; }
+#define SAFE_ARRAY_DEL( Var )				{ if( Var != nullptr ) delete [] Var; ( Var ) = nullptr; }
+#define SAFE_RELEASE( Object )				{ if( Object != nullptr ) { ( Object )->Release(); ( Object ) = nullptr; } }
+#define NEW_CLEAR( Var , Type )				{ if( Var == nullptr ) Var = new Type(); if( Var != nullptr ) memset( Var, 0, sizeof( Type ) ); }
+#define NEW_ARRAY_CLEAR( Var , Type , Num )	{ if( Var == nullptr && Num > 0 ) Var = new Type[ Num ]; if( Var != nullptr ) memset( Var, 0, sizeof( Type ) * Num ); }
 #define SAFE_STL_CONTAINER_DELETE( Var )	{ for ( auto iter = Var.begin() ; iter != Var.end() ; ++iter ) SAFE_DEL( *iter ); }
-
-#define IF_FALSE_RETURN_FALSE( Func )		{ if( ( Func ) == false ) { return false; } }
-#define IF_NULL_RETURN_FALSE( Ptr )			{ if( ( Ptr ) == nullptr ) return false; }
-#define IF_FAILED_RETURN_FALSE( Hr )		{ if( FAILED( ( Hr ) ) ) return false; }
 
 #define IF_FALSE_BREAK( Func )				{ if( ( Func ) == false ) break; }
 #define IF_NULL_BREAK( Ptr )				{ if( ( Ptr ) == nullptr ) break; }

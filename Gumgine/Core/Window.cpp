@@ -20,8 +20,8 @@ namespace Gumgine
 			this->titleName = _titleName;
 			this->width = _width;
 			this->height = _height;
-			IF_FALSE_RETURN_FALSE( SetWindow() );
-			return true;
+			
+			return SetWindow();
 		}
 
 		//void Window::SetWindowSize( DWORD width , DWORD height )
