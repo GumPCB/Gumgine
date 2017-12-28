@@ -58,11 +58,6 @@ namespace Gumgine
 			return true;
 		}
 
-		//bool Core::Init()
-		//{
-		//	return true;
-		//}
-
 		bool Core::PreCoreInit()
 		{
 			SetWindow();
@@ -93,11 +88,6 @@ namespace Gumgine
 			return true;
 		}
 
-		//bool Core::Frame()
-		//{
-		//	return true;
-		//}
-
 		bool Core::PreCoreFrame()
 		{
 			coreTimer->Frame();
@@ -124,11 +114,6 @@ namespace Gumgine
 			PostCoreRender();
 			return true;
 		}
-
-		//bool Core::Render()
-		//{
-		//	return true;
-		//}
 
 		bool Core::PreCoreRender()
 		{
@@ -159,11 +144,6 @@ namespace Gumgine
 			Release();
 			return PostCoreRelease();
 		}
-
-		//bool Core::Release()
-		//{
-		//	return true;
-		//}
 
 		bool Core::PreCoreRelease()
 		{
