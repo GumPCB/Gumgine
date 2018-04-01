@@ -15,6 +15,7 @@ namespace Gumgine
 			unsigned int	height = 480;
 			std::wstring	titleName;
 			bool			isEnd = false;
+			bool			isActive = true;
 
 		public:
 			explicit Window();

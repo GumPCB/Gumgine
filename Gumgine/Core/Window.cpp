@@ -37,13 +37,25 @@ namespace Gumgine
 				{
 					isEnd = true;
 					PostQuitMessage( 0 );
+					return 0;
 				}
-				return 0;
 				case WM_CLOSE:
 				{
 					DestroyWindow( hwnd );
+					return 0;
 				}
-				return 0;
+				case WM_ACTIVATE:
+				{
+					if ( LOWORD( wParam ) == WA_INACTIVE )
+					{
+						isActive = false;
+					}
+					else
+					{
+						isActive = true;
+					}
+					return 0;
+				}
 				default:
 				break;
 			}

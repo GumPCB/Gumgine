@@ -1,6 +1,5 @@
 #include "DeviceSample.h"
 
-
 DeviceSample::DeviceSample()
 {}
 
@@ -21,6 +20,10 @@ bool DeviceSample::Frame()
 
 bool DeviceSample::Render()
 {
+	float blue[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+	d3dImmediateContext->ClearRenderTargetView( renderTargetView, blue );
+	d3dImmediateContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH || D3D11_CLEAR_STENCIL, 1.0f, 0 );
+	swapChain->Present( 0, 0 );
 	return true;
 }
 
@@ -38,7 +41,7 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 	std::mutex mutex;
 	std::lock_guard< std::mutex > lock( mutex );
 
-	const int maxThreadNum = 32;
+	const int maxThreadNum = 2;
 	std::vector< std::thread > threadPool;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{

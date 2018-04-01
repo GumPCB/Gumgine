@@ -1,5 +1,5 @@
 #include "Core.h"
-#include "../Util/Timer.h"
+#include "../Util/FPSCounter.h"
 
 namespace Gumgine
 {
@@ -7,12 +7,12 @@ namespace Gumgine
 	{
 		Core::Core()
 		{
-			SAFE_NEW( coreTimer , Gumgine::Util::Timer );
+			SAFE_NEW( fpsCounter , Gumgine::Util::FPSCounter );
 		}
 
 		Core::~Core()
 		{
-			SAFE_DEL( coreTimer );
+			SAFE_DEL( fpsCounter );
 		}
 
 		int Core::Run()
@@ -62,7 +62,7 @@ namespace Gumgine
 		{
 			SetWindow();
 			SetDevice();
-			coreTimer->Init();
+			fpsCounter->Init();
 			//I_Input.Init();
 			//I_Xbox360Controller.Init();
 			//I_CameraMgr.Init();
@@ -90,7 +90,7 @@ namespace Gumgine
 
 		bool Core::PreCoreFrame()
 		{
-			coreTimer->Frame();
+			fpsCounter->Frame();
 			//I_Input.Frame();
 			//I_Xbox360Controller.Frame();
 			//I_Debug.Frame();
@@ -157,7 +157,7 @@ namespace Gumgine
 			//I_CameraMgr.Release();
 			//I_Debug.Release();
 			//m_pGumSky->Release();
-			coreTimer->Release();
+			fpsCounter->Release();
 			D3D::Release();
 			return true;
 		}

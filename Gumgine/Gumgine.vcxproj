@@ -202,6 +202,7 @@
     <ClInclude Include="Singleton\Manager.h" />
     <ClInclude Include="Singleton\Singleton.h" />
     <ClInclude Include="Util\Converter.h" />
+    <ClInclude Include="Util\FPSCounter.h" />
     <ClInclude Include="Util\Timer.h" />
     <ClInclude Include="Core\Window.h" />
   </ItemGroup>
@@ -209,6 +210,7 @@
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\D3D.cpp" />
     <ClCompile Include="Singleton\Global.cpp" />
+    <ClCompile Include="Util\FPSCounter.cpp" />
     <ClCompile Include="Util\Timer.cpp" />
     <ClCompile Include="Core\Window.cpp" />
   </ItemGroup>

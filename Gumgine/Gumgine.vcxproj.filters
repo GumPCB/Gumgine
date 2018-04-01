@@ -51,6 +51,9 @@
     <ClInclude Include="Singleton\BasicSingleton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Util\FPSCounter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util\Timer.cpp">
@@ -66,6 +69,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Core\Core.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\FPSCounter.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

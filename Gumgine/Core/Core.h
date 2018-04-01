@@ -5,14 +5,14 @@ namespace Gumgine
 {
 	namespace Util
 	{
-		class Timer;
+		class FPSCounter;
 	}
 	namespace Core
 	{
 		class Core : public Gumgine::Core::D3D , public Gumgine::IRenderable
 		{
 		private:
-			Gumgine::Util::Timer*	coreTimer = nullptr;
+			Gumgine::Util::FPSCounter*	fpsCounter = nullptr;
 		//	GumSky		*m_pGumSky;
 		public:
 			Core();

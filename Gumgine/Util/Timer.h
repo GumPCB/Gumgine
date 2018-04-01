@@ -7,15 +7,13 @@ namespace Gumgine
 	{
 		class Timer : public Gumgine::IRenderable
 		{
-		private:
+		protected:
 			__int64 start = 0;
 			__int64 end = 0;
 			__int64 frequency = 0;
 
 			float	deltaTime = 0.0f;
-			float	sumTime = 0.0f;
-			int		fps = 0;
-			int		fpsCount = 0;
+			float	totalTime = 0.0f;
 
 			bool	isStop = false;
 
@@ -28,10 +26,12 @@ namespace Gumgine
 			virtual bool Render() override;
 			virtual bool Release() override;
 
-			void Stop( bool _isStop = true ) { isStop = _isStop; }
+			void Stop( bool _isStop = true );
 
-			const float GetDeltaTime() const { return deltaTime; }
-			const int GetFPS() const { return fps; }
+			void ResetDeltaTime() { deltaTime = 0.0f; }
+			float GetDeltaTime() const { return deltaTime; }
+			float GetTotalTime() const { return totalTime; }
+			void SetTotalTime( const float _sumTime ) { totalTime = _sumTime; }
 		};
 	}
 }
