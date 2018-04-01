@@ -8,19 +8,17 @@ namespace Gumgine
 		template< class T > class BasicSingleton;
 		template< class T > class SharedFactory;
 
-		// 펙토리는 들고있고 싱글턴을 상속받고 펙토리의 인터페이스는 연결해주는 방식으로 만들자
 		// 펙토리의 Create 함수 이름을 다른 것으로 바꾸자
-		template< class manager, class managed >
-		class Manager : public BasicSingleton< Gumgine::Singleton::Manager< manager, managed > > , Gumgine::IRenderable
+		template< class managed >
+		class Manager : public BasicSingleton< Manager< managed > > , Gumgine::IRenderable
 		{
 		private:
-			friend class BasicSingleton< Gumgine::Singleton::Manager< manager, managed > >;
+			friend class BasicSingleton< Manager< managed > >;
 
 		public:
 			Manager() {};
 			virtual ~Manager();
 
-		public:
 			void RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< managed >() > createFunc );
 
 			//무조건 추가
@@ -43,26 +41,27 @@ namespace Gumgine
 			virtual bool				Release() override;	// 자원 해제
 
 		private:
+			SharedFactory< managed >						factory;
 			std::map< int , std::shared_ptr< managed > >	managedObjects;
 			unsigned int									curIndex = 0;
 		};
 
-		template< class manager , class managed >
-		Manager< manager , managed >::~Manager()
+		template< class managed >
+		Manager< managed >::~Manager()
 		{
 			Release();
 			managedObjects.clear();
 			curIndex = 0;
 		}
 
-		template< class manager , class managed >
-		void Manager< manager , managed >::RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< managed >() > createFunc )
+		template< class managed >
+		void Manager< managed >::RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< managed >() > createFunc )
 		{
-			Gumgine::Singleton::SharedFactory< managed >::GetInstance().RegisterType( typeName , createFunc );
+			factory.RegisterType( typeName , createFunc );
 		}
 
-		template< class manager , class managed >
-		unsigned int Manager< manager , managed >::Add( const std::wstring& name )
+		template< class managed >
+		unsigned int Manager< managed >::Add( const std::wstring& name )
 		{
 			auto obj = std::make_shared< managed >();
 			obj->Init();
@@ -72,10 +71,10 @@ namespace Gumgine
 			return curIndex;
 		}
 
-		template< class manager , class managed >
-		unsigned int Manager< manager , managed >::Add( const std::wstring& name , const std::wstring& typeName )
+		template< class managed >
+		unsigned int Manager< managed >::Add( const std::wstring& name , const std::wstring& typeName )
 		{
-			auto obj = Gumgine::Singleton::SharedFactory< managed >::GetInstance().Create( typeName );
+			auto obj = factory.Create( typeName );
 			obj->Init();
 			obj->SetName( name );
 			managedObjects.insert( make_pair( ++curIndex , obj ) );
@@ -83,8 +82,8 @@ namespace Gumgine
 			return curIndex;
 		}
 
-		template< class manager , class managed >
-		unsigned int Manager< manager , managed >::Create( const std::wstring& name )
+		template< class managed >
+		unsigned int Manager< managed >::Create( const std::wstring& name )
 		{
 			auto index = GetIndex( name );
 			if( index != 0 )
@@ -94,8 +93,8 @@ namespace Gumgine
 			return Add( name );
 		}
 
-		template< class manager , class managed >
-		unsigned int Manager< manager , managed >::Create( const std::wstring& name , const std::wstring& typeName )
+		template< class managed >
+		unsigned int Manager< managed >::Create( const std::wstring& name , const std::wstring& typeName )
 		{
 			auto index = GetIndex( name );
 			if( index != 0 )
@@ -105,8 +104,8 @@ namespace Gumgine
 			return Add( name, typeName );
 		}
 
-		template< class manager , class managed >
-		std::shared_ptr< managed > Manager< manager , managed >::GetPtr( const std::wstring& name )
+		template< class managed >
+		std::shared_ptr< managed > Manager< managed >::GetPtr( const std::wstring& name )
 		{
 			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
 			{
@@ -118,8 +117,8 @@ namespace Gumgine
 			return nullptr;
 		}
 
-		template< class manager , class managed >
-		std::shared_ptr< managed > Manager< manager , managed >::GetPtr( unsigned int index )
+		template< class managed >
+		std::shared_ptr< managed > Manager< managed >::GetPtr( unsigned int index )
 		{
 			auto iter = managedObjects.find( index );
 			if( iter != managedObjects.end() )
@@ -129,8 +128,8 @@ namespace Gumgine
 			return nullptr;
 		}
 
-		template< class manager , class managed >
-		unsigned int Manager< manager , managed >::GetIndex( const std::wstring& name )
+		template< class managed >
+		unsigned int Manager< managed >::GetIndex( const std::wstring& name )
 		{
 			for( auto iter = managedObjects.cbegin() ; iter != managedObjects.cend() ; ++iter )
 			{
@@ -142,8 +141,8 @@ namespace Gumgine
 			return 0;
 		}
 
-		template< class manager , class managed >
-		unsigned int Manager< manager , managed >::GetIndex( std::shared_ptr< managed > child )
+		template< class managed >
+		unsigned int Manager< managed >::GetIndex( std::shared_ptr< managed > child )
 		{
 			for( auto iter = managedObjects.cbegin() ; iter != managedObjects.cend() ; ++iter )
 			{
@@ -155,8 +154,8 @@ namespace Gumgine
 			return 0;
 		}
 
-		template< class manager , class managed >
-		bool Manager< manager , managed >::Init()
+		template< class managed >
+		bool Manager< managed >::Init()
 		{
 			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
 			{
@@ -165,8 +164,8 @@ namespace Gumgine
 			return true;
 		}
 
-		template< class manager , class managed >
-		bool Manager< manager , managed >::Frame()
+		template< class managed >
+		bool Manager< managed >::Frame()
 		{
 			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
 			{
@@ -175,8 +174,8 @@ namespace Gumgine
 			return true;
 		}
 
-		template< class manager , class managed >
-		bool Manager< manager , managed >::Render()
+		template< class managed >
+		bool Manager< managed >::Render()
 		{
 			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
 			{
@@ -185,8 +184,8 @@ namespace Gumgine
 			return true;
 		}
 
-		template< class manager , class managed >
-		bool Manager< manager , managed >::Release()
+		template< class managed >
+		bool Manager< managed >::Release()
 		{
 			for( auto iter = managedObjects.begin() ; iter != managedObjects.end() ; ++iter )
 			{

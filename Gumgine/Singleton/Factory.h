@@ -5,19 +5,13 @@ namespace Gumgine
 {
 	namespace Singleton
 	{
-		template< class T > class BasicSingleton;
-
 		template < class T >
-		class Factory : public BasicSingleton< Gumgine::Singleton::Factory< T > >
+		class Factory
 		{
-		private:
-			friend class BasicSingleton< Gumgine::Singleton::Factory< T > >;
-
-		private:
+		public:
 			Factory() {};
 			virtual ~Factory() {};
 
-		public:
 			//< 力前 殿废
 			void RegisterType( const std::wstring& typeName, std::function< T* () > createFunc )
 			{
@@ -40,16 +34,12 @@ namespace Gumgine
 
 
 		template < class T >
-		class SharedFactory : public BasicSingleton< Gumgine::Singleton::SharedFactory< T > >
+		class SharedFactory
 		{
-		private:
-			friend class BasicSingleton< Gumgine::Singleton::SharedFactory< T > >;
-
-		private:
+		public:
 			SharedFactory() {};
 			virtual ~SharedFactory() {};
 
-		public:
 			//< 力前 殿废
 			void RegisterType( const std::wstring& typeName , std::function< std::shared_ptr< T >( ) > createFunc )
 			{

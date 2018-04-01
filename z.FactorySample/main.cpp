@@ -78,10 +78,10 @@ public:
 	}
 };
 
-class AAAManager : public Gumgine::Singleton::Manager< AAAManager , AAA >
+class AAAManager : public Gumgine::Singleton::Manager< AAA >
 {
 private:
-	friend class Gumgine::Singleton::Manager< AAAManager , AAA >;
+	friend class Gumgine::Singleton::Manager< AAA >;
 private:
 	virtual ~AAAManager() {};
 };
@@ -96,7 +96,7 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 	aaaFactory.RegisterType( L"AAA" , Gumgine::Singleton::CreateSharedPtrFunc< AAA > );
 	aaaFactory.RegisterType( L"BBB" , Gumgine::Singleton::CreateSharedPtrFunc< BBB > );
 	aaaFactory.RegisterType( L"CCC" , Gumgine::Singleton::CreateSharedPtrFunc< CCC > );
-	// aaaFactory.RegisterType( L"DDD" , Gumgine::Singleton::CreateSharedPtrFunc< DDD > ); // 당연히 이건 안됨
+	//aaaFactory.RegisterType( L"DDD" , Gumgine::Singleton::CreateSharedPtrFunc< DDD > ); // 당연히 이건 안됨
 
 	//aaaFactory.RegisterType( L"CCC" , []() -> AAA*
 	//{
