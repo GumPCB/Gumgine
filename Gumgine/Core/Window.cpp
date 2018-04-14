@@ -7,12 +7,12 @@ namespace Gumgine
 	{
 		Window::Window()
 		{
-			Gumgine::Singleton::ThreadSingleton< Window >::GetInstance().SetPtr( this );
+			Singleton::ThreadSingleton< Window >::GetInstance().SetPtr( this );
 		}
 
 		Window::~Window()
 		{
-			Gumgine::Singleton::ThreadSingleton< Window >::GetInstance().Clear();
+			Singleton::ThreadSingleton< Window >::GetInstance().Clear();
 		}
 
 		bool Window::SetWin( const std::wstring& _titleName , unsigned int _width /*640*/ , unsigned int _height /*480*/ )
@@ -73,22 +73,22 @@ namespace Gumgine
 				, CS_HREDRAW | CS_VREDRAW	//CS_CLASSDC
 				, []( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam )->LRESULT
 				{
-					auto win = Gumgine::Singleton::ThreadSingleton< Window >::GetInstance().GetPtr();
+					auto win = Singleton::ThreadSingleton< Window >::GetInstance().GetPtr();
 					if ( win != nullptr )
 					{
 						return win->MsgProc( hwnd , msg , wParam , lParam );
 					}
 					return NULL;
 				}
-					, 0
-					, 0
-					, hInstance//GetModuleHandle( nullptr )
-					, nullptr
-					, nullptr
-					, nullptr	//(HBRUSH)GetStockObject(WHITE_BRUSH)
-					, nullptr
-					, L"Gumgine_Ver0.01"
-					, nullptr
+				, 0
+				, 0
+				, hInstance//GetModuleHandle( nullptr )
+				, nullptr
+				, nullptr
+				, nullptr	//(HBRUSH)GetStockObject(WHITE_BRUSH)
+				, nullptr
+				, L"Gumgine_Ver0.01"
+				, nullptr
 			};
 			RegisterClassEx( &wc );
 

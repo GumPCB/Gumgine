@@ -10,7 +10,7 @@ namespace Gumgine
 
 		// 펙토리의 Create 함수 이름을 다른 것으로 바꾸자
 		template< class managed >
-		class Manager : public BasicSingleton< Manager< managed > > , Gumgine::IRenderable
+		class Manager : public BasicSingleton< Manager< managed > > , IRenderable
 		{
 		private:
 			friend class BasicSingleton< Manager< managed > >;

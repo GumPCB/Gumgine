@@ -6,7 +6,7 @@ namespace Gumgine
 	namespace Util
 	{
 		class Timer;
-		class FPSCounter : public Gumgine::IRenderable
+		class FPSCounter : public IRenderable
 		{
 		private:
 			Timer* timer = nullptr;

@@ -9,10 +9,10 @@ namespace Gumgine
 	}
 	namespace Core
 	{
-		class Core : public Gumgine::Core::D3D , public Gumgine::IRenderable
+		class Core : public D3D , public IRenderable
 		{
 		private:
-			Gumgine::Util::FPSCounter*	fpsCounter = nullptr;
+			Util::FPSCounter*	fpsCounter = nullptr;
 		//	GumSky		*m_pGumSky;
 		public:
 			Core();
@@ -39,7 +39,7 @@ namespace Gumgine
 			bool	PostCoreFrame();
 			//드로우
 			bool	CoreRender();
-			virtual bool	PreCoreRender();
+			bool	PreCoreRender();
 			bool	PostCoreRender();
 			//해제
 			bool	CoreRelease();

@@ -7,7 +7,7 @@ namespace Gumgine
 	{
 		Core::Core()
 		{
-			SAFE_NEW( fpsCounter , Gumgine::Util::FPSCounter );
+			SAFE_NEW( fpsCounter , Util::FPSCounter );
 		}
 
 		Core::~Core()
