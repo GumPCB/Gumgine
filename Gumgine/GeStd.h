@@ -3,12 +3,6 @@
 #include <Windows.h>
 //#include <stdlib.h>
 //#include <atlconv.h>
-#include <tchar.h>
-#include <D3D11.h>
-//#include <d3d11_2.h>
-//#include <d3d9.h>
-//#include <d3dx9.h>
-#include <xinput.h>
 
 #include <thread>
 #include <mutex>
@@ -24,6 +18,13 @@
 #include <functional>
 #include <memory>
 #include <cassert>
+#include <exception>
+
+#include <xinput.h>
+#include <D3D12.h>
+#include <dxgi1_4.h>
+#include <wrl.h>
+#include <comdef.h>
 
 //using namespace std;
 

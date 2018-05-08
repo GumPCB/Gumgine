@@ -62,6 +62,7 @@ namespace Gumgine
 		{
 			SetWindow();
 			SetDevice();
+			Resize();
 			fpsCounter->Init();
 			//I_Input.Init();
 			//I_Xbox360Controller.Init();

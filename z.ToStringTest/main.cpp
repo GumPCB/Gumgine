@@ -92,9 +92,9 @@ std::string StdTostringTest( __int64 MAX , __int64 FOR_MAX )
 	}
 	timer.Frame();
 
-	float time1 = timer.GetDeltaTime();
+	double time1 = timer.GetDeltaTime();
 
-	return "std result = count : " + std::to_string( FOR_MAX ) + ", Total seconds : " + std::to_string( time1 ) + ", Average seconds : " + std::to_string( time1 / static_cast< float >( FOR_MAX ) ) + ", range : -" + std::to_string( MAX ) + " ~ " + std::to_string( MAX );
+	return "std result = count : " + std::to_string( FOR_MAX ) + ", Total seconds : " + std::to_string( time1 ) + ", Average seconds : " + std::to_string( time1 / static_cast< double >( FOR_MAX ) ) + ", range : -" + std::to_string( MAX ) + " ~ " + std::to_string( MAX );
 }
 
 std::string GumTostringTest( __int64 MAX , __int64 FOR_MAX )
@@ -109,9 +109,9 @@ std::string GumTostringTest( __int64 MAX , __int64 FOR_MAX )
 	}
 	timer.Frame();
 
-	float time1 = timer.GetDeltaTime();
+	double time1 = timer.GetDeltaTime();
 
-	return "Gum result = count : " + std::to_string( FOR_MAX ) + ", Total seconds : " + std::to_string( time1 ) + ", Average seconds : " + std::to_string( time1 / static_cast< float >( FOR_MAX ) ) + ", range : -" + std::to_string( MAX ) + " ~ " + std::to_string( MAX );
+	return "Gum result = count : " + std::to_string( FOR_MAX ) + ", Total seconds : " + std::to_string( time1 ) + ", Average seconds : " + std::to_string( time1 / static_cast< double >( FOR_MAX ) ) + ", range : -" + std::to_string( MAX ) + " ~ " + std::to_string( MAX );
 }
 
 

@@ -8,7 +8,7 @@ namespace Gumgine
 		template< class T > class BasicSingleton;
 		template< class T > class SharedFactory;
 
-		// 펙토리의 Create 함수 이름을 다른 것으로 바꾸자
+		// TODO : 펙토리의 Create 함수 이름을 다른 것으로 바꾸자
 		template< class managed >
 		class Manager : public BasicSingleton< Manager< managed > > , IRenderable
 		{

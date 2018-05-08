@@ -17,7 +17,7 @@ namespace Gumgine
 		private:
 			friend class BasicSingleton< ThreadSingleton< T > >;
 			std::map< std::thread::id , T* > ptrList;
-			std::mutex mutex;
+			std::mutex mutex; // TODO : 읽기쓰기락으로 변경하자
 		public:
 			void SetPtr( T* ptr )
 			{

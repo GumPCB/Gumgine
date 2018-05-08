@@ -27,9 +27,9 @@ namespace Gumgine
 		{
 			timer->Frame();
 			++count;
-			if ( timer->GetTotalTime() > 1.0f )
+			if ( timer->GetTotalTime() > 1.0 )
 			{
-				timer->SetTotalTime( timer->GetTotalTime() - 1.0f );
+				timer->SetTotalTime( timer->GetTotalTime() - 1.0 );
 				fps = count;
 				count = 0;
 			}
