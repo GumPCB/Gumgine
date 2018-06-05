@@ -8,10 +8,9 @@ namespace Gumgine
 		class Timer : public IRenderable
 		{
 		protected:
-			__int64 start = 0;
-			__int64 end = 0;
+			std::chrono::steady_clock::time_point start;
+			std::chrono::steady_clock::time_point end;
 			
-			double	secondsPerfrequency = 0.0;
 			double	deltaTime = 0.0;
 			double	totalTime = 0.0;
 
@@ -31,7 +30,6 @@ namespace Gumgine
 			void ResetDeltaTime() { deltaTime = 0.0; }
 			double GetDeltaTime() const { return deltaTime; }
 			double GetTotalTime() const { return totalTime; }
-			void SetTotalTime( const double _sumTime ) { totalTime = _sumTime; }
 		};
 	}
 }

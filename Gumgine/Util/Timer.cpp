@@ -12,11 +12,7 @@ namespace Gumgine
 
 		bool Timer::Init()
 		{
-			// 주파수 변동폭
-			__int64 frequency = 0;
-			QueryPerformanceFrequency( ( LARGE_INTEGER* ) &frequency );
-			QueryPerformanceCounter( ( LARGE_INTEGER* ) &start );
-			secondsPerfrequency = 1.0 / frequency;
+			start = std::chrono::steady_clock::now();
 			end = start;
 			isStop = false;
 			return true;
@@ -24,13 +20,13 @@ namespace Gumgine
 
 		bool Timer::Frame()
 		{
-			QueryPerformanceCounter( ( LARGE_INTEGER* ) &end );
+			end = std::chrono::steady_clock::now();
 			if ( isStop )
 			{
 				start = end;
 				return true;
 			}
-			deltaTime = ( end - start ) * ( secondsPerfrequency );
+			deltaTime = std::chrono::duration< double >( end - start ).count();
 			totalTime += deltaTime;
 			start = end;
 			return true;

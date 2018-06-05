@@ -1,11 +1,8 @@
 #pragma once
 #include <iostream>
-#include <Windows.h>
-//#include <stdlib.h>
-//#include <atlconv.h>
-
 #include <thread>
 #include <mutex>
+#include <shared_mutex>
 #include <vector>
 #include <deque>
 #include <list>
@@ -19,14 +16,14 @@
 #include <memory>
 #include <cassert>
 #include <exception>
+#include <chrono>
 
+#include <Windows.h>
 #include <xinput.h>
 #include <D3D12.h>
 #include <dxgi1_4.h>
 #include <wrl.h>
 #include <comdef.h>
-
-//using namespace std;
 
 #define SAFE_ZERO( Var )					{ Var = 0; }
 #define SAFE_NEW( Var , Type )				{ if( Var == nullptr ) Var = new Type; }

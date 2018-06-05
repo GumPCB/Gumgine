@@ -1,23 +1,19 @@
 #include "FPSCounter.h"
-#include "Timer.h"
 
 namespace Gumgine
 {
 	namespace Util
 	{
 		FPSCounter::FPSCounter()
-		{
-			SAFE_NEW( timer, Timer );
-		}
+		{}
 
 		FPSCounter::~FPSCounter()
-		{
-			SAFE_DEL( timer );
-		}
+		{}
 
 		bool FPSCounter::Init()
 		{
-			timer->Init();
+			point = std::chrono::steady_clock::now();
+			second = 0.0;
 			fps = 0;
 			count = 0;
 			return true;
@@ -25,11 +21,15 @@ namespace Gumgine
 
 		bool FPSCounter::Frame()
 		{
-			timer->Frame();
 			++count;
-			if ( timer->GetTotalTime() > 1.0 )
+
+			auto old = point;
+			point = std::chrono::steady_clock::now();
+			second += std::chrono::duration< double >( point - old ).count();
+			
+			if ( second > 1.0 )
 			{
-				timer->SetTotalTime( timer->GetTotalTime() - 1.0 );
+				second -= 1.0;
 				fps = count;
 				count = 0;
 			}

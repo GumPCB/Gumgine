@@ -5,11 +5,11 @@ namespace Gumgine
 {
 	namespace Util
 	{
-		class Timer;
 		class FPSCounter : public IRenderable
 		{
 		private:
-			Timer* timer = nullptr;
+			std::chrono::steady_clock::time_point point;
+			double	second = 0.0;
 			int		fps = 0;
 			int		count = 0;
 

@@ -17,7 +17,15 @@ namespace Gumgine
 
 		int Core::Run()
 		{
-			CoreInit();
+			try
+			{
+				CoreInit();
+			}
+			catch ( const D3DException& e )
+			{
+				MessageBoxA( nullptr, e.what(), "CoreInit failed", MB_OK );
+				return false;
+			}
 			ShowWindow( GetHWND() , SW_SHOWDEFAULT );
 			UpdateWindow( GetHWND() );
 

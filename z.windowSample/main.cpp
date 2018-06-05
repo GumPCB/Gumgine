@@ -77,8 +77,6 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 	//std::wstring num;
 	//__int64 aa = -10000000000000000;
 	//num = Gumgine::Util::Converter::ToWString( aa );
-	std::mutex mutex;
-	std::lock_guard< std::mutex > lock( mutex );
 
 	//MakeWindow();
 	testThread();
