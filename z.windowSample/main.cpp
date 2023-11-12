@@ -6,52 +6,52 @@
 void testThread2()
 {
 	const int maxThreadNum = 4096;
-	std::vector< std::thread* > threadPool;
+	std::vector< std::thread* > threads;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
-		threadPool.push_back( new std::thread( [ = ]()
+		threads.push_back( new std::thread( [ = ]()
 		{
 			Gumgine::Core::Window window;
 		} ) );
 	}
 
-	for ( auto &thread : threadPool )
+	for ( auto &thread : threads )
 	{
 		thread->join();
 	}
 
-	SAFE_STL_CONTAINER_DELETE( threadPool );
-	threadPool.clear();
+	SAFE_STL_CONTAINER_DELETE( threads );
+	threads.clear();
 }
 
 void testThread()
 {
 	const int maxThreadNum = 8;
-	std::vector< std::thread* > threadPool;
+	std::vector< std::thread* > threads;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
-		threadPool.push_back( new std::thread( [ = ]()
+		threads.push_back( new std::thread( [ = ]()
 		{
 			testThread2();
 		} ) );
 	}
 
-	for ( auto &thread : threadPool )
+	for ( auto &thread : threads )
 	{
 		thread->join();
 	}
 
-	SAFE_STL_CONTAINER_DELETE( threadPool );
-	threadPool.clear();
+	SAFE_STL_CONTAINER_DELETE( threads );
+	threads.clear();
 }
 
 void MakeWindow()
 {
 	const int maxThreadNum = 4;
-	std::vector< std::thread* > threadPool;
+	std::vector< std::thread* > threads;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
-		threadPool.push_back( new std::thread( [ = ]()
+		threads.push_back( new std::thread( [ = ]()
 		{
 			std::wstring threadName = L"T" + std::to_wstring( i );
 			std::wcout << threadName << L", pid = " << std::this_thread::get_id() << std::endl;
@@ -61,13 +61,13 @@ void MakeWindow()
 		} ) );
 	}
 
-	for ( auto &thread : threadPool )
+	for ( auto &thread : threads )
 	{
 		thread->join();
 	}
 
-	SAFE_STL_CONTAINER_DELETE( threadPool );
-	threadPool.clear();
+	SAFE_STL_CONTAINER_DELETE( threads );
+	threads.clear();
 }
 
 int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR /*lpCmdLine*/ , int /*nShowCmd*/ )

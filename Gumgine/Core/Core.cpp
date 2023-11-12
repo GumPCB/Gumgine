@@ -43,7 +43,7 @@ namespace Gumgine
 					CoreFrame();
 					CoreRender();
 				}
-				Sleep( 1 );
+				std::this_thread::sleep_for( std::chrono::nanoseconds( 1 ) );
 			}
 			CoreRelease();
 			return ( int ) msg.wParam;

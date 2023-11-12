@@ -161,10 +161,10 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 
 
 	//const int maxThreadNum = 1;
-	//std::vector< std::thread > threadPool;
+	//std::vector< std::thread > threads;
 	//for ( int i = 1; i <= maxThreadNum; ++i )
 	//{
-	//	threadPool.push_back( std::thread( [ = ]()
+	//	threads.push_back( std::thread( [ = ]()
 	//	{
 	//		std::wstring threadName = L"T" + std::to_wstring( i );
 	//		std::wcout << threadName << L", pid = " << std::this_thread::get_id() << std::endl;
@@ -174,11 +174,11 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 	//	} ) );
 	//}
 
-	//for ( auto &thread : threadPool )
+	//for ( auto &thread : threads )
 	//{
 	//	thread.join();
 	//}
-	//threadPool.clear();
+	//threads.clear();
 
 	return 0;
 }

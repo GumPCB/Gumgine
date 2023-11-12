@@ -1,6 +1,7 @@
 #include "DeviceSample.h"
 
 DeviceSample::DeviceSample()
+	: dist( 0.0f, 0.001f )
 {}
 
 
@@ -9,29 +10,30 @@ DeviceSample::~DeviceSample()
 
 bool DeviceSample::Init()
 {
+	timer.Init();
 	return true;
 }
 
 
 bool DeviceSample::Frame()
 {
+	timer.Frame();
+
+	backBufferColor.f[ 0 ] += static_cast< float >( timer.GetDeltaTime() );
+	if ( backBufferColor.f[ 0 ] > 1.0f )
+	{
+		backBufferColor.f[ 0 ] -= 1.0f;
+	}
+	backBufferColor.f[ 1 ] -= dist( randomdevice );
+	if ( backBufferColor.f[ 1 ] < 0.0f )
+	{
+		backBufferColor.f[ 1 ] += 1.0f;
+	}
 	return true;
 }
 
 bool DeviceSample::Render()
 {
-	static auto backBufferColor = DirectX::Colors::LightSteelBlue;
-	backBufferColor.f[ 0 ] += 0.001f;
-	if ( backBufferColor.f[ 0 ] > 1.0f )
-	{
-		backBufferColor.f[ 0 ] -= 1.0f;
-	}
-	backBufferColor.f[ 1 ] -= 0.001f;
-	if ( backBufferColor.f[ 1 ] < 0.0f )
-	{
-		backBufferColor.f[ 1 ] += 1.0f;
-	}
-
 	ThrowIfFailed( commandAllocator->Reset() );
 	ThrowIfFailed( commandList->Reset( commandAllocator.Get(), nullptr ) );
 
@@ -58,6 +60,7 @@ bool DeviceSample::Render()
 
 bool DeviceSample::Release()
 {
+	timer.Release();
 	return true;
 }
 
@@ -67,10 +70,10 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 	//_CrtSetBreakAlloc( 319 );
 
 	const int maxThreadNum = 1;
-	std::vector< std::thread > threadPool;
+	std::vector< std::thread > threads;
 	for ( int i = 1; i <= maxThreadNum; ++i )
 	{
-		threadPool.push_back( std::thread( [ = ]()
+		threads.push_back( std::thread( [ = ]()
 		{
 			std::wstring threadName = L"T" + std::to_wstring( i );
 			std::wcout << threadName << L", pid = " << std::this_thread::get_id() << std::endl;
@@ -80,11 +83,11 @@ int WINAPI wWinMain( HINSTANCE /*hInst*/ , HINSTANCE /*hPrevInstance*/ , LPWSTR 
 		} ) );
 	}
 
-	for ( auto &thread : threadPool )
+	for ( auto &thread : threads )
 	{
 		thread.join();
 	}
-	threadPool.clear();
+	threads.clear();
 
 	return 0;
 }

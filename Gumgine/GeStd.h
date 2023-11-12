@@ -17,6 +17,7 @@
 #include <cassert>
 #include <exception>
 #include <chrono>
+#include <random>
 
 #include <Windows.h>
 #include <xinput.h>
