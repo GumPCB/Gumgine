@@ -281,12 +281,11 @@ namespace Gumgine
 		void D3D::LogOutputDisplayModes( IDXGIOutput * output, DXGI_FORMAT format )
 		{
 			unsigned int count = 0;
-			unsigned int flags = 0;
 
-			output->GetDisplayModeList( format, flags, &count, nullptr );
+			output->GetDisplayModeList( format, DXGI_ENUM_MODES_INTERLACED, &count, nullptr );
 
 			std::vector< DXGI_MODE_DESC > modeList( count );
-			output->GetDisplayModeList( format, flags, &count, &modeList[ 0 ] );
+			output->GetDisplayModeList( format, DXGI_ENUM_MODES_INTERLACED, &count, &modeList[ 0 ] );
 
 			for ( auto& itr : modeList )
 			{
@@ -299,7 +298,7 @@ namespace Gumgine
 			}
 		}
 
-		bool D3D::Release()
+		bool D3D::Release() noexcept
 		{
 			return true;
 		}

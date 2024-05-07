@@ -19,41 +19,52 @@ bool DeviceSample::Frame()
 {
 	timer.Frame();
 
-	backBufferColor.f[ 0 ] += static_cast< float >( timer.GetDeltaTime() );
-	if ( backBufferColor.f[ 0 ] > 1.0f )
-	{
-		backBufferColor.f[ 0 ] -= 1.0f;
-	}
-	backBufferColor.f[ 1 ] -= dist( randomdevice );
-	if ( backBufferColor.f[ 1 ] < 0.0f )
-	{
-		backBufferColor.f[ 1 ] += 1.0f;
-	}
+	//backBufferColor.f[ 0 ] += static_cast< float >( timer.GetDeltaTime() );
+	//if ( backBufferColor.f[ 0 ] > 1.0f )
+	//{
+	//	backBufferColor.f[ 0 ] -= 1.0f;
+	//}
+	//backBufferColor.f[ 1 ] -= dist( randomdevice );
+	//if ( backBufferColor.f[ 1 ] < 0.0f )
+	//{
+	//	backBufferColor.f[ 1 ] += 1.0f;
+	//}
+	//backBufferColor.f[2] += dist(randomdevice);
+	//if (backBufferColor.f[2] > 1.0f)
+	//{
+	//	backBufferColor.f[2] -= 1.0f;
+	//}
 	return true;
 }
 
 bool DeviceSample::Render()
 {
-	ThrowIfFailed( commandAllocator->Reset() );
-	ThrowIfFailed( commandList->Reset( commandAllocator.Get(), nullptr ) );
+	Gumgine::Core::Vertex1 vertices[] =
+	{
+		{ DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT4(DirectX::Colors::White) },
+		{ DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT4(DirectX::Colors::Black) },
+		{ DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT4(DirectX::Colors::Red) },
+		{ DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT4(DirectX::Colors::Green) },
+		{ DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT4(DirectX::Colors::Blue) },
+		{ DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT4(DirectX::Colors::Yellow) },
+		{ DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT4(DirectX::Colors::Cyan) },
+		{ DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT4(DirectX::Colors::Magenta) }
+	};
 
-	auto currentBackBufferView = CurrentBackBufferView();
-	auto depthStencilView = DepthStencilView();
-	auto barrier = CD3DX12_RESOURCE_BARRIER::Transition( CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET );
-	commandList->ResourceBarrier( 1, &barrier );
-	commandList->RSSetViewports( 1, &viewPort );
-	commandList->RSSetScissorRects( 1, &scissorRect );
-	commandList->ClearRenderTargetView( currentBackBufferView, backBufferColor, 0, nullptr );
-	commandList->ClearDepthStencilView( depthStencilView, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr );
-	commandList->OMSetRenderTargets( 1, &currentBackBufferView, true, &depthStencilView );
-	barrier = CD3DX12_RESOURCE_BARRIER::Transition( CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT );
-	commandList->ResourceBarrier( 1, &barrier );
-	ThrowIfFailed( commandList->Close() );
-	ID3D12CommandList* commandLists[] = { commandList.Get() };
-	commandQueue->ExecuteCommandLists( _countof( commandLists ), commandLists );
-	ThrowIfFailed( swapChain->Present( 0, 0 ) );
-	currentBackBuffer = ( currentBackBuffer + 1 ) % swapChainBufferCount;
-	FlushCommandQueue();
+	const UINT64 vbByteSize = 8 * sizeof(Gumgine::Core::Vertex1);
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> VertexBufferGPU = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> VertexBufferUploader = nullptr;
+	VertexBufferGPU = d3dUtil::CreateDefaultBuffer(d3dDevice.Get(), commandList.Get(), vertices, vbByteSize, VertexBufferUploader);
+	
+	D3D12_VERTEX_BUFFER_VIEW vbv;
+	vbv.BufferLocation = VertexBufferGPU->GetGPUVirtualAddress();
+	vbv.StrideInBytes = sizeof(Gumgine::Core::Vertex1);
+	vbv.SizeInBytes = 8 * sizeof(Gumgine::Core::Vertex1);
+
+	D3D12_VERTEX_BUFFER_VIEW vertexBuffers[1] = { vbv };
+	commandList->IASetVertexBuffers(0, 1, vertexBuffers);
+
 	return true;
 }
 

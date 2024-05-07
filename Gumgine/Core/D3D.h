@@ -17,6 +17,14 @@ class D3DException : public std::exception
 		_com_error err( hr );
 		OutputDebugString( err.ErrorMessage() );
 	}
+	D3DException(const D3DException& x) { this->reason << x.what(); };
+	D3DException& operator=(const D3DException& x)
+	{
+		if (this == &x)	return *this;
+
+		this->reason << x.what();
+		return *this;
+	}
 	virtual const char* what() const override
 	{
 		return reason.str().c_str();
@@ -35,6 +43,32 @@ namespace Gumgine
 {
 	namespace Core
 	{
+		struct Vertex1
+		{
+			DirectX::XMFLOAT3 Pos;
+			DirectX::XMFLOAT4 Color;
+		};
+		//D3D12_INPUT_ELEMENT_DESC desc1[] =
+		//{
+		//	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_PER_VERTEX_DATA, 0},
+		//	{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_PER_VERTEX_DATA, 0}
+		//};
+
+		struct Vertex2
+		{
+			DirectX::XMFLOAT3 Pos;
+			DirectX::XMFLOAT3 Normal;
+			DirectX::XMFLOAT2 Tex0;
+			DirectX::XMFLOAT2 Tex1;
+		};
+		//D3D12_INPUT_ELEMENT_DESC desc2[] =
+		//{
+		//	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_PER_VERTEX_DATA, 0},
+		//	{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_PER_VERTEX_DATA, 0},
+		//	{"TEXTCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D12_INPUT_PER_VERTEX_DATA, 0},
+		//	{"TEXTCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, 32, D3D12_INPUT_PER_VERTEX_DATA, 0}
+		//};
+
 		class D3D : public Window
 		{
 		protected:
@@ -95,7 +129,7 @@ namespace Gumgine
 			void LogAdapterOutputs( IDXGIAdapter* adapter );
 			void LogOutputDisplayModes( IDXGIOutput* output, DXGI_FORMAT format );
 
-			bool Release();
+			bool Release() noexcept;
 		};
 	}
 }

@@ -5,7 +5,7 @@ namespace Gumgine
 {
 	namespace Core
 	{
-		Core::Core()
+		Core::Core() noexcept
 		{
 			SAFE_NEW( fpsCounter , Util::FPSCounter );
 		}
@@ -15,7 +15,7 @@ namespace Gumgine
 			SAFE_DEL( fpsCounter );
 		}
 
-		int Core::Run()
+		__int64 Core::Run()
 		{
 			try
 			{
@@ -46,7 +46,7 @@ namespace Gumgine
 				std::this_thread::sleep_for( std::chrono::nanoseconds( 1 ) );
 			}
 			CoreRelease();
-			return ( int ) msg.wParam;
+			return msg.wParam;
 		}
 
 		bool Core::SetWin( const std::wstring& _titleName , unsigned int _width /*640*/ , unsigned int _height /*480*/ )
@@ -135,6 +135,23 @@ namespace Gumgine
 			//I_Debug.Render();
 			//I_LightMgr.Render();
 			//I_CameraMgr.Render();
+			ThrowIfFailed(commandAllocator->Reset());
+			ThrowIfFailed(commandList->Reset(commandAllocator.Get(), nullptr));
+
+			auto currentBackBufferView = CurrentBackBufferView();
+			auto depthStencilView = DepthStencilView();
+			auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+			commandList->ResourceBarrier(1, &barrier);
+			commandList->RSSetViewports(1, &viewPort);
+			commandList->RSSetScissorRects(1, &scissorRect);
+			commandList->ClearRenderTargetView(currentBackBufferView, DirectX::Colors::Black, 0, nullptr);
+			commandList->ClearDepthStencilView(depthStencilView, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
+			commandList->OMSetRenderTargets(1, &currentBackBufferView, true, &depthStencilView);
+			barrier = CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+			commandList->ResourceBarrier(1, &barrier);
+			ThrowIfFailed(commandList->Close());
+			ID3D12CommandList* commandLists[] = { commandList.Get() };
+			commandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 			return true;
 		}
 
@@ -142,6 +159,9 @@ namespace Gumgine
 		{
 			//g_pd3dDevice->EndScene();
 			//g_pd3dDevice->Present( NULL , NULL , NULL , NULL );
+			ThrowIfFailed(swapChain->Present(0, 0));
+			currentBackBuffer = (currentBackBuffer + 1) % swapChainBufferCount;
+			FlushCommandQueue();
 			return true;
 		}
 		//////////////////////////////////////////////////////////////////// Rander //

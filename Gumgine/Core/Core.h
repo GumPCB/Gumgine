@@ -15,7 +15,7 @@ namespace Gumgine
 			Util::FPSCounter*	fpsCounter = nullptr;
 		//	GumSky		*m_pGumSky;
 		public:
-			Core();
+			Core() noexcept;
 			virtual ~Core();
 		
 			//모든 클래스는 반드시 아래의 함수를 정의한다.
@@ -24,7 +24,7 @@ namespace Gumgine
 			virtual bool	Render() override = 0;
 			virtual bool	Release() override = 0;
 		
-			int				Run();
+			__int64			Run();
 
 			virtual bool	SetWin( const std::wstring& _titleName , unsigned int _width = 640 , unsigned int _height = 480 ) override;
 

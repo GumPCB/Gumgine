@@ -17,7 +17,6 @@ public:
 
 private:
 	Gumgine::Util::Timer timer;
-	DirectX::XMVECTORF32 backBufferColor = DirectX::Colors::LightSteelBlue;
 	std::random_device randomdevice;
 	std::uniform_real_distribution< float > dist;
 };

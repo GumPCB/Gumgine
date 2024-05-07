@@ -26,9 +26,9 @@ namespace Gumgine
 			//void			SetWindowSize( DWORD width , DWORD height );
 			virtual LRESULT MsgProc( HWND hwnd , UINT msg , WPARAM wParam , LPARAM lParam );
 
-			const HWND		GetHWND() const { return hWnd; }
-			const int		GetWidth() const { return width; }
-			const int		GetHeight() const { return height; }
+			const HWND		GetHWND() const noexcept { return hWnd; }
+			const int		GetWidth() const noexcept { return width; }
+			const int		GetHeight() const noexcept { return height; }
 
 		protected:
 			virtual bool	SetWindow();
