@@ -1,36 +1,16 @@
 #pragma once
-#include "..\..\Common\d3dx12.h"
 #include "..\..\Common\d3dUtil.h"
 #include "Window.h"
-#include <codecvt>
+
 class D3DException : public std::exception
 {
 	public:
-	D3DException( HRESULT hr, const char* fileName, int line, const char* funcName )
-	{
-		std::ios::fmtflags flags = reason.flags();
-		reason << "HRESULT : 0x" << std::hex << hr;
-		reason.setf( flags );
-		reason << ", File : " << fileName
-			<< "(" << line << "), Func : " << funcName << "\n";
-		OutputDebugStringA( reason.str().c_str() );
-		_com_error err( hr );
-		OutputDebugString( err.ErrorMessage() );
-	}
-	D3DException(const D3DException& x) { this->reason << x.what(); };
-	D3DException& operator=(const D3DException& x)
-	{
-		if (this == &x)	return *this;
-
-		this->reason << x.what();
-		return *this;
-	}
-	virtual const char* what() const override
-	{
-		return reason.str().c_str();
-	}
+		D3DException(HRESULT hr, const char* fileName, int line, const char* funcName);
+		D3DException(const D3DException& x);
+		D3DException& operator=(const D3DException& x);
+		virtual const char* what() const override;
 	private:
-	std::stringstream reason;
+		std::stringstream reason;
 };
 
 #define ThrowIfFailed( X )														\

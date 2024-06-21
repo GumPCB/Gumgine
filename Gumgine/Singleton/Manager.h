@@ -1,5 +1,4 @@
 #pragma once
-#include "../GeStd.h"
 
 namespace Gumgine
 {
@@ -10,7 +9,7 @@ namespace Gumgine
 
 		// TODO : 펙토리의 Create 함수 이름을 다른 것으로 바꾸자
 		template< class managed >
-		class Manager : public BasicSingleton< Manager< managed > > , IRenderable
+		class Manager : public BasicSingleton< Manager< managed > > , Core::IRenderable
 		{
 		private:
 			friend class BasicSingleton< Manager< managed > >;

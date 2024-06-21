@@ -1,8 +1,6 @@
-#include <iostream>
-#include <Windows.h>
-#include "../Gumgine/Singleton/Singleton.h"
+#include "GeStd.h"
 
-class AAA : public Gumgine::IManagedRenderable
+class AAA : public Gumgine::Core::IManagedRenderable
 {
 public:
 	AAA() {};
@@ -51,7 +49,7 @@ public:
 	}
 };
 
-class DDD : public Gumgine::IManagedRenderable
+class DDD : public Gumgine::Core::IManagedRenderable
 {
 public:
 	DDD() {};

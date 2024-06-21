@@ -1,6 +1,34 @@
+#include "pch.h"
 #include "D3D.h"
 
-#include <codecvt>
+D3DException::D3DException(HRESULT hr, const char* fileName, int line, const char* funcName)
+{
+	const std::ios::fmtflags flags = reason.flags();
+	reason << "HRESULT : 0x" << std::hex << hr;
+	reason.setf(flags);
+	reason << ", File : " << fileName << "(" << line << "), Func : " << funcName << "\n";
+	OutputDebugStringA(reason.str().c_str());
+	_com_error err(hr);
+	OutputDebugString(err.ErrorMessage());
+}
+
+D3DException::D3DException(const D3DException& x)
+{
+	this->reason << x.what();
+}
+
+D3DException& D3DException::operator=(const D3DException& x)
+{
+	if (this == &x)	return *this;
+
+	this->reason << x.what();
+	return *this;
+}
+
+const char* D3DException::what() const
+{
+	return reason.str().c_str();
+}
 
 
 namespace Gumgine

@@ -1,5 +1,5 @@
-#include "Core.h"
-#include "../Util/FPSCounter.h"
+#include "pch.h"
+#include "../GeStd.h"
 
 namespace Gumgine
 {

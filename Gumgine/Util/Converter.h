@@ -1,7 +1,4 @@
 #pragma once
-#include "../GeStd.h"
-
-
 
 namespace Gumgine
 {

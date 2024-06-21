@@ -1,7 +1,4 @@
-#include <iostream>
-#include <Windows.h>
-#include "../Gumgine/Core/Window.h"
-#include "../Gumgine/Util/Converter.h"
+#include "GeStd.h"
 
 void testThread2()
 {

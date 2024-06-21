@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../Gumgine/Core/Core.h"
+#include "GeStd.h"
 
 class DeviceSample : public Gumgine::Core::Core
 {

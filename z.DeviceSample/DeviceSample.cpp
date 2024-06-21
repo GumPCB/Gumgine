@@ -71,7 +71,6 @@ bool DeviceSample::Render()
 
 bool DeviceSample::Release()
 {
-	timer.Release();
 	return true;
 }
 

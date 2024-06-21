@@ -1,11 +1,10 @@
 #pragma once
-#include "../GeStd.h"
 
 namespace Gumgine
 {
 	namespace Core
 	{
-		// 윈도우 클래스, 스레드 하나당 하나씩만 사용해야 함
+		// 윈도우 클래스
 		class Window
 		{
 		protected:

@@ -1,5 +1,7 @@
+#include "pch.h"
 #include "Window.h"
-#include "../Singleton/Singleton.h"
+#include "../Singleton/BasicSingleton.h"
+#include "../Singleton/Global.h"
 
 namespace Gumgine
 {

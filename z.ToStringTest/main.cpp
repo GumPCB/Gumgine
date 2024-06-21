@@ -1,9 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include "DeviceSample.h"
-#include "../Gumgine/Util/Converter.h"
-#include "../Gumgine/Util/Timer.h"
 #include "oldToString.h"
 
 void ConverterSample()
